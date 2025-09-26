@@ -6,6 +6,7 @@ import path from 'path';
 import ClotherRoutes from './routes/ClothesRoutes.js';
 import UserRoutes from './routes/UserRoutes.js';
 
+
 dotenv.config();
 connectDB();
 
@@ -16,8 +17,11 @@ app.use(cors())
 
 app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 
+
+
+
 app.use("/api/clothes", ClotherRoutes);
-app.use("/api/user", UserRoutes);
+app.use("/api/users", UserRoutes);
 
 const PORT = process.env.PORT || 5000;
 
