@@ -5,7 +5,9 @@ import connectDB from './config/db.js';
 import path from 'path';
 import ClotherRoutes from './routes/ClothesRoutes.js';
 import UserRoutes from './routes/UserRoutes.js';
-
+import wishlistRoutes from "./routes/wishlistRoutes.js";
+import cartRoutes from "./routes/cartRoutes.js";
+import { protect } from "./middleware/authMiddleware.js";
 
 dotenv.config();
 connectDB();
@@ -22,6 +24,8 @@ app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 
 app.use("/api/clothes", ClotherRoutes);
 app.use("/api/users", UserRoutes);
+app.use("/api/wishlist",protect, wishlistRoutes);
+app.use("/api/cart",protect, cartRoutes);
 
 const PORT = process.env.PORT || 5000;
 
