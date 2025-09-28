@@ -1,12 +1,15 @@
 import React from "react";
-import SellerForm from "../Components/SellerForm";
-import ClothesList from "../Components/Products";
+import Hero from "../Components/Hero"; // import the Hero component
 
 const Home = () => {
   return (
-    <div className="container mt-4">
-      <SellerForm />
-      <ClothesList />
+    <div>
+      {/* Hero Section - starts immediately at top */}
+      <Hero />
+      <div style={{backgroundColor:"red"}}>
+           <h1>Hello</h1>
+      </div>
+     
     </div>
   );
 };

@@ -1,0 +1,148 @@
+/* Custom CSS for NET-A-PORTER Navbar */
+
+/* Main navbar styling */
+.navbar-custom {
+  background-color: #000 !important;
+  padding: 0;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+/* Transparent by default */
+/* Navbar transition */
+.navbar {
+    background-color: #000 !important;
+}
+
+/* Category row overlay style (semi-transparent over hero) */
+
+/* Top navigation row */
+.navbar-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 30px;
+  width: 100%;
+}
+
+/* Left section - Language */
+.navbar-left {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  color: white;
+}
+
+.navbar-left span {
+  font-size: 14px;
+}
+
+/* Center section - Brand */
+.navbar-center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.navbar-brand-custom {
+  color: white !important;
+  text-decoration: none !important;
+  font-weight: bold;
+  font-size: 2rem;
+  letter-spacing: 2px;
+}
+
+/* Right section - Actions */
+.navbar-right {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 25px;
+}
+
+.navbar-right a,
+.navbar-right span {
+  color: white;
+  text-decoration: none;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.navbar-right a:hover {
+  color: #ccc;
+}
+
+/* Category menu */
+.category-menu {
+  border-top: 1px solid #333;
+  background-color: #000;
+  padding: 12px 0;
+  width: 100%;
+}
+
+.category-nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.category-nav li {
+  margin: 0;
+}
+
+.category-nav a {
+  color: white;
+  text-decoration: none;
+  font-size: 14px;
+  padding: 5px 0;
+  transition: color 0.3s ease;
+}
+
+.category-nav a:hover {
+  color: #ccc;
+}
+
+/* Apply compact styling to all screens (moved from 992px breakpoint) */
+.navbar-top {
+  padding: 10px 15px;
+}
+
+.navbar-right {
+  gap: 15px;
+}
+
+.category-nav {
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.navbar-brand-custom {
+  font-size: 1.5rem;
+}
+
+/* Responsive adjustments for smaller screens only */
+@media (max-width: 768px) {
+  .navbar-top {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .navbar-left,
+  .navbar-center,
+  .navbar-right {
+    flex: none;
+  }
+  
+  .category-nav {
+    gap: 15px;
+  }
+}
