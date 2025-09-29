@@ -10,6 +10,21 @@ function SellerForm() {
     designer: "",
     manufacturedAt: "",
     price: "",
+    editorNotes: "",
+    sizeAndFit: {
+      description: [""],
+      fitTips: [""],
+      fabricDetails: [""],
+      modelInfo: {
+        height: "",
+        wearingSize: "",
+        measurements: {
+          bust: "",
+          waist: "",
+          hip: "",
+        },
+      },
+    },
   });
 
   const [images, setImages] = useState([null]); // start with one input
@@ -18,6 +33,23 @@ function SellerForm() {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSizeAndFitChange = (path, value) => {
+    // path: e.g. "modelInfo.height"
+    const keys = path.split(".");
+    const updated = { ...formData.sizeAndFit };
+
+    let obj = updated;
+    for (let i = 0; i < keys.length - 1; i++) {
+      obj = obj[keys[i]];
+    }
+    obj[keys[keys.length - 1]] = value;
+
+    setFormData({
+      ...formData,
+      sizeAndFit: updated,
     });
   };
 
@@ -37,7 +69,11 @@ function SellerForm() {
 
     const data = new FormData();
     Object.keys(formData).forEach((key) => {
-      data.append(key, formData[key]);
+      if (key === "sizeAndFit") {
+        data.append("sizeAndFit", JSON.stringify(formData.sizeAndFit)); // ✅ send as JSON string
+      } else {
+        data.append(key, formData[key]);
+      }
     });
 
     // append only filled images (not null)
@@ -54,17 +90,33 @@ function SellerForm() {
       const result = await res.json();
       console.log(result);
       alert(result.message || "Upload successful!");
+
       setFormData({
-    category: "",
-    dress: "",
-    type: "",
-    size: "",
-    color: "",
-    designer: "",
-    manufacturedAt: "",
-    price: "",
-  })
-  setImages([null])
+        category: "",
+        dress: "",
+        type: "",
+        size: "",
+        color: "",
+        designer: "",
+        manufacturedAt: "",
+        price: "",
+        editorNotes: "",
+        sizeAndFit: {
+          description: [""],
+          fitTips: [""],
+          fabricDetails: [""],
+          modelInfo: {
+            height: "",
+            wearingSize: "",
+            measurements: {
+              bust: "",
+              waist: "",
+              hip: "",
+            },
+          },
+        },
+      });
+      setImages([null]);
     } catch (error) {
       console.error("Error uploading:", error);
       alert("Upload failed!");
@@ -151,6 +203,113 @@ function SellerForm() {
           value={formData.price}
           onChange={handleChange}
           required
+        />
+        <br />
+
+        {/* Editor Notes */}
+        <textarea
+          name="editorNotes"
+          placeholder="Editor notes about the product"
+          value={formData.editorNotes}
+          onChange={handleChange}
+        />
+        <br />
+
+        {/* Size and Fit */}
+        <h3>Size and Fit</h3>
+        <input
+          type="text"
+          placeholder="Description"
+          value={formData.sizeAndFit.description[0]}
+          onChange={(e) =>
+            setFormData({
+              ...formData,
+              sizeAndFit: {
+                ...formData.sizeAndFit,
+                description: [e.target.value],
+              },
+            })
+          }
+        />
+        <br />
+        <input
+          type="text"
+          placeholder="Fit Tips"
+          value={formData.sizeAndFit.fitTips[0]}
+          onChange={(e) =>
+            setFormData({
+              ...formData,
+              sizeAndFit: {
+                ...formData.sizeAndFit,
+                fitTips: [e.target.value],
+              },
+            })
+          }
+        />
+        <br />
+        <input
+          type="text"
+          placeholder="Fabric Details"
+          value={formData.sizeAndFit.fabricDetails[0]}
+          onChange={(e) =>
+            setFormData({
+              ...formData,
+              sizeAndFit: {
+                ...formData.sizeAndFit,
+                fabricDetails: [e.target.value],
+              },
+            })
+          }
+        />
+        <br />
+
+        <h4>Model Info</h4>
+        <input
+          type="text"
+          placeholder="Height"
+          value={formData.sizeAndFit.modelInfo.height}
+          onChange={(e) =>
+            handleSizeAndFitChange("modelInfo.height", e.target.value)
+          }
+        />
+        <br />
+        <input
+          type="text"
+          placeholder="Wearing Size"
+          value={formData.sizeAndFit.modelInfo.wearingSize}
+          onChange={(e) =>
+            handleSizeAndFitChange("modelInfo.wearingSize", e.target.value)
+          }
+        />
+        <br />
+        <input
+          type="text"
+          placeholder="Bust"
+          value={formData.sizeAndFit.modelInfo.measurements.bust}
+          onChange={(e) =>
+            handleSizeAndFitChange("modelInfo.measurements.bust", e.target.value)
+          }
+        />
+        <br />
+        <input
+          type="text"
+          placeholder="Waist"
+          value={formData.sizeAndFit.modelInfo.measurements.waist}
+          onChange={(e) =>
+            handleSizeAndFitChange(
+              "modelInfo.measurements.waist",
+              e.target.value
+            )
+          }
+        />
+        <br />
+        <input
+          type="text"
+          placeholder="Hip"
+          value={formData.sizeAndFit.modelInfo.measurements.hip}
+          onChange={(e) =>
+            handleSizeAndFitChange("modelInfo.measurements.hip", e.target.value)
+          }
         />
         <br />
 

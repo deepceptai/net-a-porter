@@ -67,8 +67,8 @@ export const Upload = async (req, res) => {
       designer,
       manufacturedAt,
       price,
-      editorNotes,
-      sizeAndFit,
+      editorNotes: editorNotes || "",
+      sizeAndFit: pasedSizeAndFit,
       images: imageUrls,
     });
 
@@ -164,4 +164,28 @@ export const getFilterOption = async (req, res) => {
             message: "Internal server error: Error while fetching filter options"
         });
     }
+}
+export const getSingleClothe = async (req, res) =>{
+  try{
+    const { id } = req.params;
+
+    const product = await Clothes.findOne({ _id: id, category: "clothes"});
+
+    if (!product){
+      return res.status(400).json({
+        success: false,
+        message: "could'nt find the product"
+      });
+    }  
+    return res.status(201).json({
+      success: true,
+      data: product
+    });
+  } catch (error){
+    console.error("Error in fetching the product", error);
+    return res.status(500).json({
+      success: false,
+      message: "internal server error"
+    });
+  }
 }

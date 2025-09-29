@@ -1,6 +1,6 @@
 import express from "express";
 import multer from "multer";
-import { Upload, filterClothes, getClothes, getFilterOption } from "../controllers/ClothesController.js";
+import { Upload, filterClothes, getClothes, getFilterOption, getSingleClothe } from "../controllers/ClothesController.js";
 
 const router = express.Router();
 
@@ -13,6 +13,7 @@ router.post("/upload", upload.array("images", 10), Upload);
 
 // route for fetching clothes
 router.get("/", getClothes);
+router.get("/:id", getSingleClothe);
 router.get("/filter", filterClothes);
 router.get("/filter/options", getFilterOption);
 
