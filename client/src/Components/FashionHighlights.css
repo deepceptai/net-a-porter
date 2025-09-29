@@ -1,0 +1,11 @@
+.fashion-card {
+  transition: transform 0.3s ease-in-out;
+}
+
+.fashion-card:hover {
+  transform: translateY(-5px);
+}
+
+.fashion-img {
+  object-fit: cover;
+}

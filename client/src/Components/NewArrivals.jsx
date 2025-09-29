@@ -11,12 +11,12 @@ export default function NewArrivals() {
     { id: 4, image: '/Images/image4.png', brand: 'BALENCIAGA', alt: 'Black wide leg pants' },
     { id: 5, image: '/Images/image5.png', brand: 'DIOR', alt: 'White blazer' },
     { id: 6, image: '/Images/image6.png', brand: 'GUCCI', alt: 'Designer handbag' },
-    { id: 7, image: '/Images/image1.png', brand: 'PRADA', alt: 'Black dress' },
-    { id: 8, image: '/Images/image2.png', brand: 'VERSACE', alt: 'Denim jacket' },
-    { id: 9, image: '/Images/image3.png', brand: 'CHANEL', alt: 'Tweed jacket' },
-    { id: 10, image: '/Images/image4.png', brand: 'FENDI', alt: 'Trench coat' },
-    { id: 11, image: '/Images/image5.png', brand: 'BALENCIAGA', alt: 'Sneakers' },
-    { id: 12, image: '/Images/image6.png', brand: 'KHAITE', alt: 'Wool sweater' }
+    { id: 7, image: '/Images/image7.png', brand: 'PRADA', alt: 'Black dress' },
+    { id: 8, image: '/Images/image8.png', brand: 'VERSACE', alt: 'Denim jacket' },
+    { id: 9, image: '/Images/image9.avif', brand: 'CHANEL', alt: 'Tweed jacket' },
+    { id: 10, image: '/Images/image10.avif', brand: 'FENDI', alt: 'Trench coat' },
+    { id: 11, image: '/Images/image11.avif', brand: 'BALENCIAGA', alt: 'Sneakers' },
+    { id: 12, image: '/Images/image12.avif', brand: 'KHAITE', alt: 'Wool sweater' }
   ];
 
   const totalSlides = Math.ceil(products.length / 4);
@@ -32,8 +32,8 @@ export default function NewArrivals() {
           <div className="col-lg-4 col-md-12">
             <div className="section-header">
               <div className="item-count">1,149 NEW ITEMS</div>
-              <h1 className="section-title">New In</h1>
-              <p className="section-description">
+              <h1 className="section-title description">New In</h1>
+              <p className="section-description description">
                 New arrivals, now dropping five days a week – discover the latest launches onsite from Monday to Friday
               </p>
               <button className="shop-btn">Shop New In</button>

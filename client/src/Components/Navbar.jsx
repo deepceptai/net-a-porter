@@ -49,11 +49,11 @@ const Navbar = ({ scrolled, showNav }) => {
           <div className="top-bar d-flex align-items-center justify-content-between w-100 px-4 py-2 gap-2">
             <div className="left-section d-flex align-items-center">
               <div className="language-selector d-flex align-items-center">
-                <span role="img" aria-label="italy" className="flag-icon me-2">
+                <span role="img" aria-label="italy" className="me-2">
                   🇮🇹
                 </span>
                 <span className="language-text">English</span>
-                <i className="bi bi-chevron-down ms-1"></i>
+                
               </div>
               
               {/* Mobile Hamburger Menu Button */}

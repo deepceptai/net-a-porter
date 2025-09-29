@@ -1,0 +1,19 @@
+.section-title-2 {
+  font-size: 0.9rem;
+  letter-spacing: 2px;
+  font-weight: 500;
+}
+
+.outerwear-card {
+  transition: transform 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+.outerwear-card:hover {
+  transform: translateY(-5px);
+}
+
+.outerwear-img {
+  object-fit: cover;
+  height: 100%;
+}
