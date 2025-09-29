@@ -18,7 +18,7 @@ const uploadToCloudinary = (fileBuffer) => {
 
 export const Upload = async (req, res) => {
   try {
-    const { category, dress, type, size, color, designer, manufacturedAt, price } = req.body;
+    const { category, dress, type, size, color, designer, manufacturedAt, price, editorNotes, sizeAndFit } = req.body;
 
     // validation
     if (
@@ -46,6 +46,18 @@ export const Upload = async (req, res) => {
 
     const imageUrls = uploadResults.map((result) => result.secure_url);
 
+    let pasedSizeAndFit = JSON.parse(sizeAndFit);
+    if (sizeAndFit){
+      try{
+        pasedSizeAndFit = JSON.parse(sizeAndFit);
+      } catch (err){
+        return res.status(400).json({
+          success: false,
+          message: "size and fit format. Must be a valid JSON"
+        });
+      }
+    }
+
     const newClothes = new Clothes({
       category,
       dress,
@@ -55,6 +67,8 @@ export const Upload = async (req, res) => {
       designer,
       manufacturedAt,
       price,
+      editorNotes,
+      sizeAndFit,
       images: imageUrls,
     });
 
@@ -76,7 +90,7 @@ export const Upload = async (req, res) => {
 
 export const getClothes = async (req, res) => {
   try {
-    const clothes = await Clothes.find().sort({ createdAt: -1 });
+    const clothes = await Clothes.find({ category: "clothes" }).sort({ createdAt: -1 });
     return res.status(200).json({
       success: true,
       data: clothes,
