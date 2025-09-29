@@ -20,7 +20,7 @@
 
 /* Promotional banner styling */
 .promo-banner {
-  background-color: #f5f5f5;
+  background-color: #cbcbcb;
   color: #333333;
   font-size: 15px;
   font-weight: 500;
@@ -31,7 +31,7 @@
 }
 
 .promo-banner:hover {
-  background-color: #eeeeee;
+  background-color: #cbcbcb;
   cursor: pointer;
 }
 

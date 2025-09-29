@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 32">
+  <defs>
+    <linearGradient id="jcb-a" x1="-55.104%" x2="231.54%" y1="44.091%" y2="44.091%">
+      <stop offset="0%" stop-color="#00763C"/>
+      <stop offset="22.85%" stop-color="#00843B"/>
+      <stop offset="74.33%" stop-color="#4DA534"/>
+      <stop offset="100%" stop-color="#65B32E"/>
+    </linearGradient>
+    <linearGradient id="jcb-b" x1="0%" x2="100.26%" y1="50.246%" y2="50.246%">
+      <stop offset="0%" stop-color="#00763C"/>
+      <stop offset="22.85%" stop-color="#00843B"/>
+      <stop offset="74.33%" stop-color="#4DA534"/>
+      <stop offset="100%" stop-color="#65B32E"/>
+    </linearGradient>
+    <linearGradient id="jcb-c" x1="-59.331%" x2="249.344%" y1="47.868%" y2="47.868%">
+      <stop offset="0%" stop-color="#00763C"/>
+      <stop offset="22.85%" stop-color="#00843B"/>
+      <stop offset="74.33%" stop-color="#4DA534"/>
+      <stop offset="100%" stop-color="#65B32E"/>
+    </linearGradient>
+    <linearGradient id="jcb-d" x1="-.13%" x2="101.68%" y1="49.995%" y2="49.995%">
+      <stop offset="0%" stop-color="#312B6B"/>
+      <stop offset="47.51%" stop-color="#004E90"/>
+      <stop offset="82.61%" stop-color="#0066AD"/>
+      <stop offset="100%" stop-color="#006FB9"/>
+    </linearGradient>
+    <linearGradient id="jcb-e" x1="-.6%" x2="98.28%" y1="49.995%" y2="49.995%">
+      <stop offset="0%" stop-color="#6E2E2B"/>
+      <stop offset="17.35%" stop-color="#882A2D"/>
+      <stop offset="57.31%" stop-color="#BD1D32"/>
+      <stop offset="85.85%" stop-color="#DA0C38"/>
+      <stop offset="100%" stop-color="#E4003A"/>
+    </linearGradient>
+  </defs>
+  <g fill="none" fill-rule="evenodd">
+    <rect width="47" height="31" x=".5" y=".5" fill="#FFF" stroke="#CBCBCB" stroke-opacity=".5" rx="2"/>
+    <g fill-rule="nonzero" transform="translate(11 6)">
+      <path fill="url(#jcb-a)" d="M19.5,12 L21.4,12 C21.5,12 21.6,12 21.6,12 C22,11.9 22.3,11.6 22.3,11.2 C22.3,10.8 22,10.4 21.6,10.4 C21.5,10.4 21.4,10.4 21.4,10.4 L19.5,10.4 L19.5,12 L19.5,12 Z"/>
+      <path fill="url(#jcb-b)" d="M21.2,0 C19.5,0 18,1.5 18,3.3 L18,6.7 L22.6,6.7 C22.7,6.7 22.8,6.7 22.9,6.7 C23.9,6.8 24.7,7.3 24.7,8.2 C24.7,8.9 24.2,9.6 23.2,9.7 L23.2,9.7 C24.3,9.8 25.1,10.4 25.1,11.3 C25.1,12.3 24.2,12.9 23,12.9 L18,12.9 L18,19.9 L22.8,19.9 C24.6,19.9 26,18.5 26,16.7 L26,0 L21.2,0 L21.2,0 Z"/>
+      <path fill="url(#jcb-c)" d="M22.1,8.5 C22.1,8.1 21.8,7.8 21.4,7.7 C21.4,7.7 21.3,7.7 21.2,7.7 L19.5,7.7 L19.5,9.3 L21.2,9.3 C21.3,9.3 21.4,9.3 21.4,9.3 C21.8,9.2 22.1,8.9 22.1,8.5 L22.1,8.5 Z"/>
+      <path fill="url(#jcb-d)" d="M0,3.3 L0,11.4 C0.9,11.8 1.8,12.1 2.8,12.1 C3.9,12.1 4.5,11.4 4.5,10.5 L4.5,6.7 L7.3,6.7 L7.3,10.5 C7.3,12 6.4,13.2 3.3,13.2 C1.4,13.2 0,12.8 0,12.8 L0,20 L4.8,20 C6.5,20 8,18.6 8,16.8 L8,0 L3.2,0 C1.5,0 0,1.5 0,3.3 Z"/>
+      <path fill="url(#jcb-e)" d="M12.2,0 C10.5,0 9,1.5 9,3.3 L9,7.6 C9.8,6.9 11.2,6.4 13.6,6.5 C14.8,6.6 16.1,6.9 16.1,6.9 L16.1,8.3 C15.4,8 14.7,7.7 13.6,7.6 C11.8,7.5 10.8,8.3 10.8,9.9 C10.8,11.4 11.9,12.3 13.6,12.2 C14.6,12.1 15.4,11.8 16.1,11.5 L16.1,12.9 C16.1,12.9 14.8,13.2 13.6,13.3 C11.3,13.4 9.9,13 9,12.2 L9,20 L13.8,20 C15.6,20 17,18.6 17,16.8 L17,0 L12.2,0 L12.2,0 Z"/>
+    </g>
+  </g>
+</svg>
