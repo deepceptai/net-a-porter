@@ -1,0 +1,393 @@
+/* navbar.css - Custom styles for NET-A-PORTER navbar */
+
+.netaporter-navbar {
+  background-color: #000000 !important;
+  border-bottom: 1px solid #333;
+}
+
+.netaporter-navbar.scrolled {
+  background-color: rgba(0, 0, 0, 0.95) !important;
+  backdrop-filter: blur(10px);
+}
+
+.custom-p{
+    padding-left: 12rem;
+    padding-right: 2rem;
+}
+.navbar{
+    padding-top: 0px !important;
+}
+
+/* Promotional banner styling */
+.promo-banner {
+  background-color: #f5f5f5;
+  color: #333333;
+  font-size: 15px;
+  font-weight: 500;
+  text-align: center;
+  padding: 5px 0;
+  border-bottom: 1px solid #e0e0e0;
+  letter-spacing: 0.3px;
+}
+
+.promo-banner:hover {
+  background-color: #eeeeee;
+  cursor: pointer;
+}
+
+/* Top bar styling */
+
+/* Language selector */
+.language-selector {
+  color: #ffffff;
+  font-size: 14px;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.language-selector:hover {
+  color: #cccccc;
+}
+
+.flag-icon {
+  font-size: 16px;
+}
+
+.language-text {
+  font-weight: 400;
+}
+
+/* Brand logo */
+.brand-logo {
+  font-size: 1.5rem !important;
+  font-weight: 500 !important;
+  font-style: var(--font-primary);
+  letter-spacing: 2px;
+  color: #ffffff !important;
+  text-decoration: none !important;
+  transition: opacity 0.2s ease;
+}
+
+.brand-logo:hover {
+  opacity: 0.8;
+  color: #ffffff !important;
+}
+
+/* Right section icons */
+.right-section {
+  gap: 1.5rem;
+}
+
+.nav-icon-link {
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  transition: color 0.2s ease;
+}
+
+.nav-icon-link:hover {
+  color: #cccccc;
+}
+
+.nav-icon-link i {
+  font-size: 16px;
+}
+
+.icon-text {
+  font-weight: 400;
+  margin-left: 4px;
+}
+
+.top-bar{
+    margin-top: 0.4rem;
+}
+
+/* Rewards section */
+.rewards-section {
+  color: #ffffff;
+  font-size: 14px;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.rewards-section:hover {
+  color: #cccccc;
+}
+
+.rewards-text {
+  font-weight: 400;
+}
+
+/* Navigation menu */
+.nav-menu {
+  background-color: #000000;
+}
+
+.nav-menu-link {
+  color: #ffffff !important;
+  font-size: 15px;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  padding: 8px 16px !important;
+  text-decoration: none;
+  transition: color 0.2s ease;
+  white-space: nowrap;
+}
+
+.nav-menu-link:hover {
+  color: #cccccc !important;
+}
+
+/* Mobile Hamburger Menu */
+.mobile-hamburger {
+  display: none;
+  background: none;
+  border: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  margin-left: 0; /* Removed left margin for left alignment */
+  padding: 0;
+}
+
+.hamburger-line {
+  display: block;
+  height: 2px;
+  width: 20px;
+  background-color: #ffffff;
+  margin: 2px 0;
+  transition: 0.3s ease;
+  border-radius: 1px;
+}
+
+.mobile-hamburger:hover .hamburger-line {
+  background-color: #cccccc;
+}
+
+/* Mobile Menu Overlay */
+.mobile-menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1010;
+  backdrop-filter: blur(5px);
+}
+
+/* Mobile Side Menu */
+.mobile-side-menu {
+  position: fixed;
+  top: 0;
+  left: -100%;
+  width: 320px;
+  height: 100vh;
+  background-color: #000000;
+  z-index: 1020;
+  transition: left 0.3s ease;
+  overflow-y: auto;
+  border-right: 1px solid #333;
+}
+
+.mobile-side-menu.open {
+  left: 0;
+}
+
+.mobile-menu-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid #333;
+}
+
+.mobile-brand-logo {
+  color: #ffffff !important;
+  font-size: 1.3rem;
+  font-weight: 500;
+  letter-spacing: 1.5px;
+  text-decoration: none !important;
+}
+
+.mobile-close-btn {
+  background: none;
+  border: none;
+  color: #ffffff;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease;
+}
+
+.mobile-close-btn:hover {
+  color: #cccccc;
+}
+
+.mobile-menu-content {
+  padding: 0;
+}
+
+.mobile-nav-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.mobile-nav-item {
+  border-bottom: 1px solid #333;
+}
+
+.mobile-nav-link {
+  display: block;
+  color: #ffffff !important;
+  text-decoration: none !important;
+  padding: 18px 20px;
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.mobile-nav-link:hover {
+  background-color: #1a1a1a;
+  color: #cccccc !important;
+}
+
+.mobile-menu-footer {
+  margin-top: 30px;
+  padding: 20px;
+  border-top: 1px solid #333;
+}
+
+.mobile-secondary-links {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.mobile-secondary-link {
+  color: #ffffff !important;
+  text-decoration: none !important;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  transition: color 0.2s ease;
+  cursor: pointer;
+}
+
+.mobile-secondary-link:hover {
+  color: #cccccc !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+  .right-section {
+    gap: 1rem;
+  }
+  
+  .icon-text {
+    display: none;
+  }
+  
+  .rewards-text {
+    display: none;
+  }
+  
+  .language-text {
+    display: none;
+  }
+  
+  .promo-banner {
+    font-size: 11px;
+    padding: 6px 0;
+  }
+}
+
+@media (max-width: 991px) {
+  .mobile-hamburger {
+    display: flex;
+  }
+  .language-selector{
+    display: none !important;
+  }
+  
+  .custom-p {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  
+  .brand-logo {
+    font-size: 1.3rem !important;
+    letter-spacing: 1px;
+  }
+  
+  /* Remove left padding from container on mobile */
+  .top-bar {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+  
+  .container-fluid {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .brand-logo {
+    font-size: 1.2rem !important;
+    letter-spacing: 1px;
+  }
+  
+  .right-section {
+    gap: 0.8rem;
+  }
+  
+  .top-bar {
+    padding: 0.5rem 1rem !important;
+  }
+  
+  .promo-banner {
+    font-size: 10px;
+    padding: 5px 0;
+  }
+  
+  .mobile-side-menu {
+    width: 280px;
+  }
+}
+
+@media (max-width: 576px) {
+  .promo-banner {
+    font-size: 9px;
+    padding: 4px 0;
+  }
+  
+  .mobile-side-menu {
+    width: 100%;
+  }
+  
+  .right-section {
+    gap: 0.6rem;
+  }
+  
+  .nav-icon-link i {
+    font-size: 14px;
+  }
+  
+  /* Ensure full left alignment on very small screens */
+  .top-bar {
+    padding: 0.5rem 0.5rem !important;
+  }
+}
