@@ -6,6 +6,7 @@ import CartPage from "./pages/CartPage";
 import Wishlist from "./Components/Wishlist";
 import NewIn from "./pages/NewIn";
 import "./App.css";
+import Clothes from "./pages/Clothes";
 
 function App() {
   const [scrolled, setScrolled] = useState(false);
@@ -50,6 +51,7 @@ function App() {
         <Route path="/new-in" element={<NewIn />} />
         <Route path="/cart" element={<CartPage />} />
         <Route path="/wishlist" element={<Wishlist />} />
+        <Route path="/clothing" element={<Clothes />} />
       </Routes>
     </Router>
   );
