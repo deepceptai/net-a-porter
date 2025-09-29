@@ -1,0 +1,264 @@
+/* Import Font Awesome for icons */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css');
+
+/* Main Clothes Page Styles */
+.clothes-page {
+  background-color: #f8f9fa;
+  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Header Styles */
+.clothes-header {
+  background-color: white;
+  padding: 60px 20px;
+  border-bottom: 1px solid #e9ecef;
+  margin-bottom: 0;
+}
+
+.clothes-main-title {
+  font-size: 2.5rem;
+  font-weight: 300;
+  color: #212529;
+  margin-bottom: 20px;
+  letter-spacing: -0.5px;
+}
+
+.clothes-subtitle {
+  font-size: 1rem;
+  color: #6c757d;
+  line-height: 1.6;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.clothes-designer-link {
+  color: #212529;
+  text-decoration: underline;
+  font-weight: 500;
+}
+
+.clothes-designer-link:hover {
+  color: #000;
+  text-decoration: underline;
+}
+
+/* Filter Sidebar Styles */
+.filter-sidebar {
+  background-color: white;
+  padding: 0;
+  height: fit-content;
+  border-right: 1px solid #e9ecef;
+}
+
+.filter-section {
+  border-bottom: 1px solid #e9ecef;
+}
+
+.filter-header {
+  width: 100%;
+  padding: 20px 25px;
+  background: none;
+  border: none;
+  text-align: left;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.filter-header:hover {
+  background-color: #f8f9fa;
+}
+
+.filter-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #212529;
+  letter-spacing: 0.5px;
+}
+
+.filter-chevron {
+  font-size: 0.75rem;
+  color: #6c757d;
+  transition: transform 0.2s ease;
+}
+
+.filter-chevron.expanded {
+  transform: rotate(180deg);
+}
+
+.filter-content {
+  padding: 0 25px 20px;
+}
+
+.filter-default-option {
+  font-size: 0.875rem;
+  color: #6c757d;
+  padding: 5px 0;
+}
+
+/* Results Header Styles */
+.clothes-results-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 25px;
+  background-color: white;
+  border-bottom: 1px solid #e9ecef;
+  margin-bottom: 30px;
+}
+
+.clothes-results-count {
+  font-size: 0.875rem;
+  color: #6c757d;
+  font-weight: 500;
+}
+
+.clothes-sort-dropdown {
+  display: flex;
+  align-items: center;
+}
+
+.clothes-sort-select {
+  border: none;
+  background-color: transparent;
+  color: #212529;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 5px 15px 5px 0;
+  min-width: 140px;
+}
+
+.clothes-sort-select:focus {
+  box-shadow: none;
+  border: none;
+}
+
+/* Products Grid Styles */
+.clothes-products-grid {
+  padding: 0 15px;
+}
+
+.clothes-product-card {
+  background-color: white;
+  border-radius: 0;
+  border: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  height: 100%;
+}
+
+.clothes-product-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.clothes-product-image-container {
+  position: relative;
+  overflow: hidden;
+  background-color: #f8f9fa;
+  aspect-ratio: 3/4;
+}
+
+.clothes-product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.clothes-product-card:hover .clothes-product-image {
+  transform: scale(1.05);
+}
+
+.clothes-wishlist-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background-color: white;
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.clothes-wishlist-btn:hover {
+  background-color: #f8f9fa;
+}
+
+.clothes-wishlist-btn i {
+  font-size: 0.875rem;
+  color: #6c757d;
+}
+
+.clothes-product-info {
+  padding: 20px;
+}
+
+.clothes-product-designer {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #212529;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.clothes-product-name {
+  font-size: 0.875rem;
+  color: #6c757d;
+  margin-bottom: 12px;
+  line-height: 1.4;
+}
+
+.clothes-product-price {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #212529;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .clothes-main-title {
+    font-size: 2rem;
+  }
+  
+  .clothes-header {
+    padding: 40px 20px;
+  }
+  
+  .clothes-results-header {
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start;
+  }
+  
+  .filter-sidebar {
+    margin-bottom: 20px;
+  }
+  
+  .clothes-products-grid {
+    padding: 0 10px;
+  }
+}
+
+@media (max-width: 576px) {
+  .clothes-main-title {
+    font-size: 1.75rem;
+  }
+  
+  .filter-header {
+    padding: 15px 20px;
+  }
+  
+  .filter-content {
+    padding: 0 20px 15px;
+  }
+}

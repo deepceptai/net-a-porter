@@ -13,8 +13,8 @@ router.post("/upload", upload.array("images", 10), Upload);
 
 // route for fetching clothes
 router.get("/", getClothes);
-router.get("/:id", getSingleClothe);
 router.get("/filter", filterClothes);
 router.get("/filter/options", getFilterOption);
+router.get("/:id", getSingleClothe);
 
 export default router;
