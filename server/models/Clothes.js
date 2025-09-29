@@ -73,6 +73,30 @@ const clothesSchema = new mongoose.Schema(
         message: "At least one image is required",
       },
     },
+    editorNotes:{
+      type: String,
+      required: false
+    },
+    sizeAndFit:{
+      description:{
+        type: [String]
+      },
+      fitTips: {
+        type: [String]
+      },
+      fabricDetails: {
+        type: [String]
+      },
+       modelInfo: {
+        height: { type: String }, 
+        wearingSize: { type: String }, 
+        measurements: {
+          bust: { type: String },
+          waist: { type: String },
+          hip: { type: String },
+        },
+      },
+    }
   },
   { timestamps: true }
 );
