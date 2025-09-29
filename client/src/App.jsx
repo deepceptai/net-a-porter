@@ -79,7 +79,7 @@ function App() {
                 <span>Search</span>
               </Link>
               <span className="text-white">Bronze</span>
-              <Link to="/wishlist" className="text-white text-decoration-none">
+              <Link to="/login" className="text-white text-decoration-none">
                 <i className="bi bi-person"></i>
               </Link>
               <Link to="/wishlist" className="text-white text-decoration-none">
