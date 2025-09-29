@@ -1,0 +1,125 @@
+/* Filter Sidebar Wrapper */
+.filter-sidebar-wrapper {
+  position: sticky;
+  top: 0;
+  align-self: flex-start;
+}
+
+/* Results Count Above Filters */
+.filter-results-count {
+  font-size: 13px;
+  color: #999;
+  padding: 20px 0;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #e5e5e5;
+  font-weight: 400;
+}
+
+/* Filter Sidebar Styles */
+.filter-sidebar {
+  background-color: white;
+  padding: 0;
+  height: fit-content;
+}
+
+.filter-section {
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.filter-header {
+  width: 100%;
+  padding: 20px 0;
+  background: none;
+  border: none;
+  text-align: left;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.filter-header:hover {
+  background-color: transparent;
+}
+
+.filter-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #000;
+  letter-spacing: 0.5px;
+}
+
+.filter-chevron {
+  font-size: 10px;
+  color: #000;
+  transition: transform 0.2s ease;
+}
+
+.filter-chevron.expanded {
+  transform: rotate(180deg);
+}
+
+.filter-content {
+  padding: 0 0 20px 0;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.filter-option-item {
+  font-size: 13px;
+  color: #666;
+  padding: 8px 0;
+  font-weight: 400;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.filter-option-item:hover {
+  color: #000;
+}
+
+.filter-option-item:first-child {
+  font-weight: 500;
+  color: #000;
+}
+
+/* Custom Scrollbar for Filter Content */
+.filter-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.filter-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.filter-content::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 3px;
+}
+
+.filter-content::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Responsive Design */
+@media (max-width: 991px) {
+  .filter-sidebar-wrapper {
+    position: static;
+    margin-bottom: 30px;
+  }
+  
+  .filter-results-count {
+    text-align: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .filter-header {
+    padding: 15px 0;
+  }
+  
+  .filter-content {
+    padding: 0 0 15px 0;
+  }
+}
