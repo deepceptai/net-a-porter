@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import './FilterOption.css';
 
 function FilterOptions({ onFilterChange, selectedFilters, totalResults }) {
-  const [expandedFilter, setExpandedFilter] = useState(null);
   const [filterOptions, setFilterOptions] = useState({});
+  const [expandedFilter, setExpandedFilter] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -16,7 +16,7 @@ function FilterOptions({ onFilterChange, selectedFilters, totalResults }) {
       const data = await response.json();
       
       if (data.success) {
-        setFilterOptions(data.filers);
+        setFilterOptions(data.filters); // ✅ fixed typo
       }
     } catch (error) {
       console.error('Error fetching filter options:', error);
@@ -34,20 +34,18 @@ function FilterOptions({ onFilterChange, selectedFilters, totalResults }) {
   };
 
   const isSelected = (filterKey, value) => {
-    if (value === 'All') {
-      return selectedFilters[filterKey].length === 0;
-    }
+    if (!selectedFilters[filterKey]) return false;
+    if (value === 'All') return selectedFilters[filterKey].length === 0;
     return selectedFilters[filterKey].includes(value);
   };
 
-  // Map API data to filter structure with correct keys
   const filters = [
     { name: 'CATEGORY', key: 'category', options: ['All', ...(filterOptions.category || [])] },
     { name: 'DRESS TYPE', key: 'dress', options: ['All', ...(filterOptions.dresses || [])] },
     { name: 'TYPE', key: 'type', options: ['All', ...(filterOptions.types || [])] },
     { name: 'COLOR', key: 'color', options: ['All', ...(filterOptions.colors || [])] },
     { name: 'DESIGNER', key: 'designer', options: ['All', ...(filterOptions.designers || [])] },
-    { name: 'CLOTHING SIZE', key: 'size', options: ['All', ...(filterOptions.size || [])] }
+    { name: 'CLOTHING SIZE', key: 'size', options: ['All', ...(filterOptions.size || [])] },
   ];
 
   if (loading) {
@@ -60,9 +58,7 @@ function FilterOptions({ onFilterChange, selectedFilters, totalResults }) {
 
   return (
     <div className="filter-sidebar-wrapper">
-      <div className="filter-results-count">
-        {totalResults} Results
-      </div>
+      <div className="filter-results-count">{totalResults} Results</div>
       <div className="filter-sidebar">
         {filters.map((filter) => (
           <div key={filter.key} className="filter-section">

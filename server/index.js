@@ -10,7 +10,7 @@ import cartRoutes from "./routes/cartRoutes.js";
 import { protect } from "./middleware/authMiddleware.js";
 
 dotenv.config();
-connectDB();
+
 
 const app = express();
 
@@ -28,6 +28,7 @@ app.use("/api/cart",protect, cartRoutes);
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
+    connectDB();
     console.log(`app now listening at ${PORT}`)
     console.log(`app now running on http://localhost:${PORT}`);
 });

@@ -13,7 +13,6 @@ userSchema.index({ phone: 1 });
 userSchema.index({ roles: 1 });
 userSchema.index({ "sellerProfile.storeName": 1 });
 userSchema.index({ isAccountActive: 1, accountStatus: 1 });
-userSchema.index({ referralCode: 1 });
 userSchema.index({ lastActiveAt: -1 });
 
 // Compound indexes for better query performance

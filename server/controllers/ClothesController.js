@@ -125,6 +125,7 @@ export const Upload = async (req, res) => {
 // ---------------- GET ALL CLOTHES ----------------
 export const getClothes = async (req, res) => {
   try {
+  
     const clothes = await Clothes.find({ category: "clothes" })
       .sort({ createdAt: -1 })
       .lean();

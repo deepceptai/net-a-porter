@@ -8,7 +8,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import AuthService from '../services/authService';
 import './Register.css';
 
-const Register = () => {
+const Register = ({ setUser }) => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -72,47 +72,20 @@ const Register = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError('');
+  e.preventDefault();
+  setIsLoading(true);
+  setError("");
 
-    // Validation
-    if (!isPasswordValid()) {
-      setError('Please ensure your password meets all requirements');
-      return;
-    }
-
-    if (!formData.email || !formData.password || !formData.firstName || !formData.lastName) {
-      setError('Please fill in all required fields');
-      return;
-    }
-
-    setIsLoading(true);
-
-    try {
-      // Prepare data for API
-      const registrationData = {
-        email: formData.email,
-        password: formData.password,
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        phone: formData.phone,
-        title: formData.title,
-        dateOfBirth: formData.dateOfBirth.day && formData.dateOfBirth.month && formData.dateOfBirth.year
-          ? `${formData.dateOfBirth.year}-${formData.dateOfBirth.month.padStart(2, '0')}-${formData.dateOfBirth.day.padStart(2, '0')}`
-          : null,
-        subscribeNewsletter: formData.subscribeNewsletter
-      };
-
-      await AuthService.signup(registrationData);
-      
-      // Redirect to home or dashboard after successful registration
-      navigate('/');
-    } catch (err) {
-      setError(err.message || 'Registration failed. Please try again.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  try {
+    const newUser = await AuthService.signup(formData); // ✅ use formData
+    setUser(newUser.user); // ✅ update global user
+    navigate("/");
+  } catch (err) {
+    setError(err.message || "Registration failed. Please try again.");
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   return (
     <div className="register-page mt-5 pt-5">

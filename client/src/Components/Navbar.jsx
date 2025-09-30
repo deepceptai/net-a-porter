@@ -3,10 +3,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import AuthService from '../services/authService';
 import './navbar.css';
 
-const Navbar = ({ scrolled, showNav }) => {
+const Navbar = ({ scrolled, showNav, user, setUser, loadingUser }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
-  const [user, setUser] = useState(null);
+  
   const [loading, setLoading] = useState(true);
   const [loginForm, setLoginForm] = useState({ email: '', password: '' });
   const [showPassword, setShowPassword] = useState(false);
@@ -63,28 +63,25 @@ const Navbar = ({ scrolled, showNav }) => {
     }
   };
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    setLoginError('');
-    setIsLoggingIn(true);
-
-    try {
-      const data = await AuthService.login(loginForm);
-      setUser(data.user);
-      setLoginForm({ email: '', password: '' });
-      setIsProfileDropdownOpen(false);
-    } catch (error) {
-      setLoginError(error.message || 'Login failed. Please try again.');
-    } finally {
-      setIsLoggingIn(false);
-    }
-  };
+ 
 
   const handleLogout = () => {
     AuthService.logout();
     setUser(null);
-    setIsProfileDropdownOpen(false);
-    navigate('/');
+    navigate("/");
+  };
+
+  // when login form succeeds:
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    try {
+      const data = await AuthService.login(loginForm);
+      setUser(data.user); // ✅ update parent state
+      setLoginForm({ email: "", password: "" });
+      setIsProfileDropdownOpen(false);
+    } catch (error) {
+      setLoginError(error.message || "Login failed. Please try again.");
+    }
   };
 
   const handleMouseEnter = () => {
