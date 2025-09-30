@@ -7,6 +7,7 @@ import Wishlist from "./Components/Wishlist";
 import NewIn from "./pages/NewIn";
 import "./App.css";
 import Clothes from "./pages/Clothes";
+import Register from "./pages/Register";
 
 function App() {
   const [scrolled, setScrolled] = useState(false);
@@ -52,6 +53,7 @@ function App() {
         <Route path="/cart" element={<CartPage />} />
         <Route path="/wishlist" element={<Wishlist />} />
         <Route path="/clothing" element={<Clothes />} />
+        <Route path="/register" element={<Register/>} />
       </Routes>
     </Router>
   );

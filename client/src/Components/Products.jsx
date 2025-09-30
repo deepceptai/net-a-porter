@@ -19,8 +19,7 @@ const ClothesList = () => {
   }, []);
 
   // ✅ Hardcoded token for now (later store in localStorage after login)
-  const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZDY4ZTUwNDhiZmQ0NzIxYzA5ZmIyNCIsImVtYWlsIjoidmVua3lAZXhhbXBsZS5jb20iLCJyb2xlcyI6WyJidXllciJdLCJpYXQiOjE3NTg5ODI0NDEsImV4cCI6MTc1OTU4NzI0MX0.iFlnKneEVjIw2zJBkV-3p63MwzNoHJZaguAPQ76-3s0";
+ const token = localStorage.getItem("token");
 
   // 🛒 Add to Cart
   const handleAddToCart = async (productId, size) => {

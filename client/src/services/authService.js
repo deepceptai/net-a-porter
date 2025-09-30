@@ -1,0 +1,47 @@
+import ApiService from './api';
+
+class AuthService {
+  // User signup
+  async signup(userData) {
+    const data = await ApiService.post('/api/users/signup', userData);
+    
+    if (data.token) {
+      ApiService.setToken(data.token);
+    }
+    
+    return data;
+  }
+
+  // User login
+  async login(credentials) {
+    const data = await ApiService.post('/api/users/login', credentials);
+    
+    if (data.token) {
+      ApiService.setToken(data.token);
+    }
+    
+    return data;
+  }
+
+  // Get user profile
+  async getProfile() {
+    return await ApiService.get('/api/users/profile');
+  }
+
+  // Logout
+  logout() {
+    ApiService.removeToken();
+  }
+
+  // Check if user is authenticated
+  isAuthenticated() {
+    return !!ApiService.getToken();
+  }
+
+  // Get current token
+  getToken() {
+    return ApiService.getToken();
+  }
+}
+
+export default new AuthService();

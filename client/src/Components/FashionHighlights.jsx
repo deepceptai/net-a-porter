@@ -38,8 +38,8 @@ const FashionHighlights = () => {
                 alt={item.title}
                 className="img-fluid w-100 fashion-img"
               />
-              <h5 className="mt-3">{item.title}</h5>
-              <p>{item.desc}</p>
+              <h5 className="mt-3 description">{item.title}</h5>
+              <p className="description">{item.desc}</p>
               <a href={item.link} style={{color:"black"}} className=" description text-decoration-underline">
                 {item.linkText}
               </a>

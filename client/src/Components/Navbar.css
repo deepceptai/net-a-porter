@@ -391,3 +391,257 @@
     padding: 0.5rem 0.5rem !important;
   }
 }
+
+/* Profile Dropdown Styles */
+.profile-dropdown-wrapper {
+  position: relative;
+}
+
+.profile-trigger {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 0;
+  font-size: 1.2rem;
+}
+
+.profile-dropdown {
+  position: absolute;
+  top: calc(100% + 15px);
+  right: 0;
+  background: white;
+  min-width: 440px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  z-index: 1100;
+  animation: slideDown 0.2s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.profile-dropdown::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  right: 20px;
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 8px solid white;
+}
+
+.profile-dropdown-loading {
+  padding: 40px;
+  text-align: center;
+}
+
+.profile-dropdown-content {
+  padding: 0;
+}
+
+.profile-dropdown-header {
+  padding: 30px 40px 20px;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.profile-dropdown-title {
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 2px;
+  margin: 0;
+  color: #000;
+}
+
+.profile-dropdown-menu {
+  padding: 20px 0;
+}
+
+.profile-dropdown-item {
+  display: block;
+  padding: 12px 40px;
+  color: #000;
+  text-decoration: none;
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+
+.profile-dropdown-item:hover {
+  background-color: #f8f8f8;
+  color: #000;
+}
+
+.profile-dropdown-footer {
+  padding: 20px 40px 30px;
+  border-top: 1px solid #e5e5e5;
+}
+
+.profile-signout-btn {
+  width: 100%;
+  padding: 14px;
+  background: white;
+  color: #000;
+  border: 1px solid #000;
+  font-size: 13px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.profile-signout-btn:hover {
+  background: #000;
+  color: white;
+}
+
+/* Login Form Styles */
+.profile-login-form {
+  padding: 30px 40px;
+}
+
+.login-error-message {
+  background-color: #fee;
+  border: 1px solid #fcc;
+  color: #c33;
+  padding: 12px;
+  margin-bottom: 20px;
+  font-size: 13px;
+  border-radius: 4px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-label {
+  display: block;
+  font-size: 13px;
+  color: #000;
+  margin-bottom: 8px;
+  font-weight: 400;
+}
+
+.profile-form-input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+  transition: border-color 0.2s;
+}
+
+.profile-form-input:focus {
+  outline: none;
+  border-color: #000;
+}
+
+.profile-form-input:disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+}
+
+.password-input-wrapper {
+  position: relative;
+}
+
+.password-toggle-btn {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  padding: 4px;
+  font-size: 16px;
+}
+
+.password-toggle-btn:hover {
+  color: #000;
+}
+
+.password-toggle-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.profile-signin-btn {
+  width: 100%;
+  padding: 14px;
+  background: #000;
+  color: white;
+  border: none;
+  font-size: 13px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background-color 0.3s;
+}
+
+.profile-signin-btn:hover:not(:disabled) {
+  background: #333;
+}
+
+.profile-signin-btn:disabled {
+  background: #666;
+  cursor: not-allowed;
+}
+
+.profile-form-links {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #e5e5e5;
+}
+
+.profile-link {
+  display: block;
+  text-align: center;
+  color: #000;
+  text-decoration: underline;
+  font-size: 13px;
+  margin-bottom: 15px;
+}
+
+.profile-link:hover {
+  color: #666;
+}
+
+.profile-register {
+  text-align: center;
+  font-size: 13px;
+  color: #666;
+}
+
+.profile-link-bold {
+  color: #000;
+  text-decoration: underline;
+  font-weight: 500;
+}
+
+.profile-link-bold:hover {
+  color: #666;
+}
+
+/* Responsive adjustments for profile dropdown */
+@media (max-width: 768px) {
+  .profile-dropdown {
+    min-width: 320px;
+    right: -20px;
+  }
+  
+  .profile-dropdown-header,
+  .profile-dropdown-menu,
+  .profile-dropdown-footer,
+  .profile-login-form {
+    padding-left: 25px;
+    padding-right: 25px;
+  }
+}
