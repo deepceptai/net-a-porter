@@ -18,10 +18,10 @@ const ClothesList = () => {
       .catch((err) => console.error("Error fetching clothes:", err));
   }, []);
 
-  // ✅ Hardcoded token for now (later store in localStorage after login)
+  //Hardcoded token for now (later store in localStorage after login)
  const token = localStorage.getItem("token");
 
-  // 🛒 Add to Cart
+  // Add to Cart
   const handleAddToCart = async (productId, size) => {
     try {
       setLoadingCart(productId);
@@ -36,9 +36,9 @@ const ClothesList = () => {
     } catch (err) {
       console.error(err);
       if (err.response && err.response.data.message) {
-        alert("❌ " + err.response.data.message);
+        alert( "error"+ err.response.data.message);
       } else {
-        alert("❌ Failed to add to cart");
+        alert("Failed to add to cart");
       }
     } finally {
       setLoadingCart(null);

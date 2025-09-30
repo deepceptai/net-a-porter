@@ -409,7 +409,8 @@
 .profile-dropdown {
   position: absolute;
   top: calc(100% + 15px);
-  right: 0;
+  right: -20px;
+
   background: white;
   min-width: 440px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
@@ -530,7 +531,7 @@
 }
 
 .profile-form-input {
-  width: 100%;
+  width: 100% !important;
   padding: 12px;
   border: 1px solid #ddd;
   font-size: 14px;
