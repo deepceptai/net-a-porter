@@ -5,6 +5,7 @@ import FashionShowcase from "../Components/FashionShowcase";
 import OuterwearUpdates from "../Components/OuterwearUpdates";
 import FashionHighlights from "../Components/FashionHighlights";
 import Footer from "../Components/Footer";
+import CTA from "../Components/CTA";
 
 const Home = () => {
   return (
@@ -17,6 +18,7 @@ const Home = () => {
           <OuterwearUpdates />
           <FashionHighlights />
       </div>
+      <CTA/>
       <Footer />
     </div>
   );
