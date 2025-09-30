@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import FilterOptions from './FilterOption';
+import ProductList from './ProductList';
 import './ClothesPage.css';
 
 function ClothesPage() {
@@ -163,48 +164,11 @@ function ClothesPage() {
           
           {/* Main Content */}
           <div className="col-lg-9 col-md-8">
-            {loading ? (
-              <div className="text-center py-5">
-                <div className="spinner-border" role="status">
-                  <span className="visually-hidden">Loading...</span>
-                </div>
-              </div>
-            ) : clothes.length === 0 ? (
-              <div className="text-center py-5">
-                <p className="text-muted">No products found matching your filters.</p>
-              </div>
-            ) : (
-              <div className="row g-4 clothes-products-grid">
-                {clothes.map((item) => (
-                  <div key={item._id} className="col-lg-4 col-md-6 col-sm-12">
-                    <div className="clothes-product-card">
-                      <div className="clothes-product-image-container">
-                        <img 
-                          src={item.images?.[0] || '/placeholder-image.jpg'} 
-                          alt={`${item.designer} ${item.dress}`}
-                          className="clothes-product-image"
-                        />
-                        <button className="clothes-wishlist-btn">
-                          <i className="far fa-heart"></i>
-                        </button>
-                      </div>
-                      
-                      <div className="clothes-product-info">
-                        <div className="clothes-product-designer">
-                          {item.designer?.toUpperCase() || 'DESIGNER'}
-                        </div>
-                        <div className="clothes-product-name">
-                          {item.dress} {item.type}
-                        </div>
-                        <div className="clothes-product-price">
-                          {formatPrice(item.price)}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
+            <ProductList 
+              products={clothes}
+              loading={loading}
+              formatPrice={formatPrice}
+            />
           </div>
         </div>
       </div>
