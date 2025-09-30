@@ -99,12 +99,18 @@
   justify-content: center;
 }
 
-.cta-help-title,
-.cta-location-title {
+.cta-help-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: #343434;
+  text-transform: uppercase;
+}
+.cta-location-title{
   font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.1em;
-  color: #666;
+  color: #343434;
   text-transform: uppercase;
 }
 
