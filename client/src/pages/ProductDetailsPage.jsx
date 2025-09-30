@@ -3,6 +3,8 @@ import { useParams } from 'react-router-dom';
 import ProductImages from '../Components/ProductImages';
 import ProductDetails from '../Components/ProductDetails';
 import './ProductDetailsPage.css';
+import CTA from '../Components/CTA';
+import Footer from '../Components/Footer';
 
 function ProductDetailPage() {
   const { id } = useParams();
@@ -70,24 +72,32 @@ function ProductDetailPage() {
   }
 
   return (
-    <div className="product-detail-page">
-      <div className="product-detail-container">
-        <div className="product-detail-row">
-          {/* Left Side - Product Images */}
-          <div className="product-images-column">
+    <div className="product-detail-page margin-custom-product">
+      <div className="container-fluid">
+        <div className="row g-4">
+          {/* Left Side - Product Images (4 columns) */}
+          <div className="col-12 col-lg-4 product-images-col">
             <ProductImages 
               images={product.images}
               productName={`${product.designer} ${product.dress || product.name}`}
             />
           </div>
           
-          {/* Right Side - Product Details */}
-          <div className="product-details-column">
-            <ProductDetails 
-              product={product}
-              formatPrice={formatPrice}
-            />
+          {/* Right Side - Product Details (8 columns) */}
+          <div className="col-12 col-lg-8 product-details-col">
+            <div className="product-details-sticky">
+              <ProductDetails 
+                product={product}
+                formatPrice={formatPrice}
+              />
+            </div>
           </div>
+        </div>
+        <div className="cta">
+          <CTA/>
+        </div>
+        <div className="footer">
+          <Footer/>
         </div>
       </div>
     </div>

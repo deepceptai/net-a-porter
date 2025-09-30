@@ -8,7 +8,7 @@ const allowedDressTypes = {
     dresses: ["maxi", "midi", "mini", "gown", "saree"],
     skirts: ["pencil", "pleated", "mini", "maxi"],
     shorts: ["denim", "cargo", "chino"],
-    sweaters: ["crewneck", "vneck", "cardigan", "turtleneck"],
+    sweaters: ["crewneck", "vneck", "cardigan", "turtleneck", "coat"],
   },
   bags: {
     handbags: ["tote", "clutch", "sling", "hobo"],
@@ -43,13 +43,25 @@ const clothesSchema = new mongoose.Schema(
       },
     },
     size: {
-      type: String,
+      type: [String],
       enum: ["XS", "S", "M", "L", "XL", "XXL"],
       required: true,
+      validate: {
+        validator: function (arr) {
+          return arr.length > 0;
+        },
+        message: "At least one size is required",
+      },
     },
     color: {
-      type: String,
+      type: [String],
       required: true,
+      validate: {
+        validator: function (arr) {
+          return arr.length > 0;
+        },
+        message: "At least one color is required"
+      }
     },
     designer: {
       type: String,
