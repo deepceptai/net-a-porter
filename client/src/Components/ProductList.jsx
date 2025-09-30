@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './ProductList.css';
 
 function ProductList({ products, loading, formatPrice }) {
@@ -24,31 +25,39 @@ function ProductList({ products, loading, formatPrice }) {
     <div className="row g-4 products-grid">
       {products.map((item) => (
         <div key={item._id} className="col-lg-4 col-md-6 col-sm-12">
-          <div className="product-card">
-            <div className="product-image-container">
-              <img 
-                src={item.images?.[0] || '/placeholder-image.jpg'} 
-                alt={`${item.designer} ${item.dress || item.name}`}
-                className="product-image"
-              />
-              <button className="wishlist-btn">
-                <i className="far fa-heart"></i>
-              </button>
+          <Link to={`/product/${item._id}`} className="product-card-link">
+            <div className="product-card">
+              <div className="product-image-container">
+                <img 
+                  src={item.images?.[0] || '/placeholder-image.jpg'} 
+                  alt={`${item.designer} ${item.dress || item.name}`}
+                  className="product-image"
+                />
+                <button 
+                  className="wishlist-btn"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    console.log('Add to wishlist:', item._id);
+                  }}
+                >
+                  <i className="far fa-heart"></i>
+                </button>
+              </div>
+              
+              <div className="product-info">
+                <div className="product-designer">
+                  {item.designer?.toUpperCase() || 'DESIGNER'}
+                </div>
+                <div className="product-name">
+                  {item.dress && `${item.dress} ${item.type || ''}`}
+                  {item.name && item.name}
+                </div>
+                <div className="product-price">
+                  {formatPrice(item.price)}
+                </div>
+              </div>
             </div>
-            
-            <div className="product-info">
-              <div className="product-designer">
-                {item.designer?.toUpperCase() || 'DESIGNER'}
-              </div>
-              <div className="product-name">
-                {item.dress && `${item.dress} ${item.type || ''}`}
-                {item.name && item.name}
-              </div>
-              <div className="product-price">
-                {formatPrice(item.price)}
-              </div>
-            </div>
-          </div>
+          </Link>
         </div>
       ))}
     </div>
