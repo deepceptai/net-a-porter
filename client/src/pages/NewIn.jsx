@@ -6,7 +6,7 @@ const NewIn = () => {
   return (
     <div className="container mt-5 pt-5">
       <SellerForm />
-      <ClothesList />
+      {/* <ClothesList /> */}
     </div>
   );
 };
