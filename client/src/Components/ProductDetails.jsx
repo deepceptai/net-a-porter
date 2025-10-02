@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import './ProductDetails.css';
+import Hells from '/Images/hells.avif';
+import Scarf from '/Images/scarf.avif';
 
 function ProductDetails({ product, formatPrice }) {
   const [selectedSize, setSelectedSize] = useState('');
@@ -142,7 +144,7 @@ function ProductDetails({ product, formatPrice }) {
                     <div className="shown-here-item">
                       <div className="shown-here-item-content">
                         <img 
-                          src="https://via.placeholder.com/80" 
+                          src={Hells}
                           alt="Ruched satin mules" 
                           className="shown-here-image"
                         />
@@ -155,7 +157,7 @@ function ProductDetails({ product, formatPrice }) {
                     <div className="shown-here-item">
                       <div className="shown-here-item-content">
                         <img 
-                          src="https://via.placeholder.com/80" 
+                          src={Scarf} 
                           alt="Chenille scarf" 
                           className="shown-here-image"
                         />

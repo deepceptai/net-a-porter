@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import authService from "../services/authService";
 
 const Wishlist = () => {
   const [wishlist, setWishlist] = useState([]);
@@ -9,7 +10,13 @@ const Wishlist = () => {
   useEffect(() => {
     const fetchWishlist = async () => {
       try {
-        const token = localStorage.getItem("token");
+        const token = authService.getToken(); // ✅ centralized logic
+
+        if (!token) {
+          console.warn("⚠️ No token found. User might not be logged in.");
+          setWishlist([]);
+          return;
+        }
 
         const res = await axios.get("http://localhost:5000/api/wishlist", {
           headers: { Authorization: `Bearer ${token}` },
@@ -18,6 +25,7 @@ const Wishlist = () => {
         setWishlist(res.data);
       } catch (error) {
         console.error("Error fetching wishlist:", error);
+        setWishlist([]);
       } finally {
         setLoading(false);
       }
@@ -25,7 +33,6 @@ const Wishlist = () => {
 
     fetchWishlist();
   }, []);
-
   if (loading) return <h4 className="text-center mt-5">Loading wishlist...</h4>;
 
   return (
