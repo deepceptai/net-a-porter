@@ -1,3 +1,4 @@
+// services/authService.js
 import ApiService from './api';
 
 class AuthService {
@@ -12,8 +13,21 @@ class AuthService {
     return data;
   }
 
-  // User login
-  async login(credentials) {
+  // User login - accept either credentials object or separate email/password
+  async login(emailOrCredentials, password) {
+    let credentials;
+    
+    if (typeof emailOrCredentials === 'string') {
+      // Called with separate email and password
+      credentials = {
+        email: emailOrCredentials,
+        password: password
+      };
+    } else {
+      // Called with credentials object
+      credentials = emailOrCredentials;
+    }
+    
     const data = await ApiService.post('/api/users/login', credentials);
     
     if (data.token) {

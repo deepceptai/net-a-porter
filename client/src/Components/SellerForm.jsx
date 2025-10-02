@@ -1,4 +1,5 @@
   import { useState } from "react";
+  import authService from "../services/authService";
 
   function SellerForm() {
     const [formData, setFormData] = useState({
@@ -65,72 +66,76 @@
     };
 
     const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  const data = new FormData();
-  Object.keys(formData).forEach((key) => {
-    if (key === "sizeAndFit") {
-      data.append("sizeAndFit", JSON.stringify(formData.sizeAndFit));
-    } else if (key === "size" || key === "color") {
-      // Convert comma-separated string → array
-      const arr = formData[key]
-        .split(",")
-        .map((v) => v.trim())
-        .filter(Boolean);
+    const data = new FormData();
+    Object.keys(formData).forEach((key) => {
+      if (key === "sizeAndFit") {
+        data.append("sizeAndFit", JSON.stringify(formData.sizeAndFit));
+      } else if (key === "size" || key === "color") {
+        const arr = formData[key]
+          .split(",")
+          .map((v) => v.trim())
+          .filter(Boolean);
 
-      data.append(key, JSON.stringify(arr)); // send as JSON string
-    } else {
-      data.append(key, formData[key]);
-    }
-  });
-
-  // append only filled images (not null)
-  images.forEach((img) => {
-    if (img) data.append("images", img);
-  });
-
-  try {
-    const res = await fetch("http://localhost:5000/api/clothes/upload", {
-      method: "POST",
-      body: data,
+        data.append(key, JSON.stringify(arr));
+      } else {
+        data.append(key, formData[key]);
+      }
     });
 
-    const result = await res.json();
-    console.log(result);
-    alert(result.message || "Upload successful!");
+    images.forEach((img) => {
+      if (img) data.append("images", img);
+    });
 
-    // reset form
-    setFormData({
-      category: "",
-      dress: "",
-      type: "",
-      size: "",
-      color: "",
-      designer: "",
-      manufacturedAt: "",
-      price: "",
-      editorNotes: "",
-      sizeAndFit: {
-        description: [""],
-        fitTips: [""],
-        fabricDetails: [""],
-        modelInfo: {
-          height: "",
-          wearingSize: "",
-          measurements: {
-            bust: "",
-            waist: "",
-            hip: "",
+    try {
+      // ✅ use authService to get the token
+      const token = authService.getToken();
+
+      const res = await fetch("http://localhost:5000/api/clothes/upload", {
+        method: "POST",
+        body: data,
+        headers: {
+          Authorization: `Bearer ${token}`, // ✅ pulled from authService
+        },
+      });
+
+      const result = await res.json();
+      console.log(result);
+      alert(result.message || "Upload successful!");
+
+      // reset form
+      setFormData({
+        category: "",
+        dress: "",
+        type: "",
+        size: "",
+        color: "",
+        designer: "",
+        manufacturedAt: "",
+        price: "",
+        editorNotes: "",
+        sizeAndFit: {
+          description: [""],
+          fitTips: [""],
+          fabricDetails: [""],
+          modelInfo: {
+            height: "",
+            wearingSize: "",
+            measurements: {
+              bust: "",
+              waist: "",
+              hip: "",
+            },
           },
         },
-      },
-    });
-    setImages([null]);
-  } catch (error) {
-    console.error("Error uploading:", error);
-    alert("Upload failed!");
-  }
-};
+      });
+      setImages([null]);
+    } catch (error) {
+      console.error("Error uploading:", error);
+      alert("Upload failed!");
+    }
+  };
 
 
     return (

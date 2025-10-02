@@ -5,6 +5,7 @@ import ProductDetails from '../Components/ProductDetails';
 import './ProductDetailsPage.css';
 import CTA from '../Components/CTA';
 import Footer from '../Components/Footer';
+import authService from '../services/authService';
 
 function ProductDetailPage() {
   const { id } = useParams();
@@ -20,9 +21,18 @@ function ProductDetailPage() {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(`http://localhost:5000/api/clothes/${id}`);
+      const token = authService.getToken(); // ✅ get token from AuthService
+
+      const response = await fetch(`http://localhost:5000/api/clothes/${id}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token && { Authorization: `Bearer ${token}` }) // ✅ add header only if token exists
+        }
+      });
+
       const data = await response.json();
-      
+
       if (data.success) {
         setProduct(data.data);
       } else {

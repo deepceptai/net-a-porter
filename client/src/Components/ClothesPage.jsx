@@ -19,18 +19,27 @@ function ClothesPage() {
 
   // ---------------- Fetch filter options on mount ----------------
   useEffect(() => {
-    const fetchFilterOptions = async () => {
-      try {
-        const res = await fetch("http://localhost:5000/api/clothes/filters");
-        const data = await res.json();
-        if (data.success) setFilterOptions(data.filters);
-      } catch (err) {
-        console.error("Error fetching filter options:", err);
+  const fetchFilterOptions = async () => {
+    try {
+      const res = await fetch("http://localhost:5000/api/clothes/filters");
+      const data = await res.json();
+      if (data.success) {
+        setFilterOptions({
+          category: data.filters.category,
+          dress: data.filters.dresses,   // 🔄 renamed
+          type: data.filters.types,      // 🔄 renamed
+          size: data.filters.size,
+          color: data.filters.colors,    // 🔄 renamed
+          designer: data.filters.designers // 🔄 renamed
+        });
       }
-    };
+    } catch (err) {
+      console.error("Error fetching filter options:", err);
+    }
+  };
 
-    fetchFilterOptions();
-  }, []);
+  fetchFilterOptions();
+}, []);
 
   // ---------------- Fetch clothes whenever filters change ----------------
   useEffect(() => {
@@ -50,8 +59,8 @@ function ClothesPage() {
 
       const queryString = queryParams.toString();
       const url = queryString 
-        ? `http://localhost:5000/api/clothes/filter?${queryString}`
-        : 'http://localhost:5000/api/clothes/filter?category=clothes';
+        ? `http://localhost:5000/api/clothes/filters?${queryString}`
+        : 'http://localhost:5000/api/clothes/filters?category=clothes';
 
       const response = await fetch(url);
       const data = await response.json();

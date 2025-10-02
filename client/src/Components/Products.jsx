@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import authService from "../services/authService";
 
 const ClothesList = () => {
   const [clothes, setClothes] = useState([]);
@@ -8,14 +9,24 @@ const ClothesList = () => {
 
   // 🔹 Fetch Clothes from backend
   useEffect(() => {
-    axios
-      .get("http://localhost:5000/api/clothes/")
-      .then((res) => {
+    const fetchClothes = async () => {
+      try {
+        const token = authService.getToken(); // ✅ get token
+        const res = await axios.get("http://localhost:5000/api/clothes/", {
+          headers: {
+            ...(token && { Authorization: `Bearer ${token}` }),
+          },
+        });
+
         if (res.data.success) {
           setClothes(res.data.data);
         }
-      })
-      .catch((err) => console.error("Error fetching clothes:", err));
+      } catch (err) {
+        console.error("Error fetching clothes:", err);
+      }
+    };
+
+    fetchClothes();
   }, []);
 
   //Hardcoded token for now (later store in localStorage after login)

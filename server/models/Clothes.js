@@ -1,25 +1,12 @@
 import mongoose from "mongoose";
 
-const allowedDressTypes = {
-   clothes: {
-    pants: ["denim", "cargo", "chinos", "joggers", "trousers", "leggings"],
-    shirts: ["tshirt", "formal", "polo", "casual", "kurta"],
-    jackets: ["leather", "bomber", "hoodie", "denim", "puffer"],
-    dresses: ["maxi", "midi", "mini", "gown", "saree"],
-    skirts: ["pencil", "pleated", "mini", "maxi"],
-    shorts: ["denim", "cargo", "chino"],
-    sweaters: ["crewneck", "vneck", "cardigan", "turtleneck", "coat"],
-  },
-  bags: {
-    handbags: ["tote", "clutch", "sling", "hobo"],
-    backpacks: ["laptop", "travel", "school", "hiking"],
-    wallets: ["bi-fold", "tri-fold", "zipper"],
-    luggage: ["suitcase", "duffel", "trolley"],
-  },
-};
-
 const clothesSchema = new mongoose.Schema(
   {
+    user:{
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "User",
+    },
     category: {
       type: String,
       enum: ["clothes", "bags", "footwear", "accessories"],
@@ -28,23 +15,16 @@ const clothesSchema = new mongoose.Schema(
     dress: {
       type: String,
       required: true,
+      trim: true,
     },
     type: {
       type: String,
       required: true,
-      validate: {
-        validator: function (value) {
-          return (
-            allowedDressTypes[this.category]?.[this.dress]?.includes(value)
-          );
-        },
-        message: (props) =>
-          `${props.value} is not a valid type for ${props.instance.dress} in category ${props.instance.category}`,
-      },
+      trim: true,
     },
     size: {
       type: [String],
-      enum: ["XS", "S", "M", "L", "XL", "XXL"],
+      enum: ["XXS", "XS", "S", "M", "L", "XL", "XXL", "XXXL"],
       required: true,
       validate: {
         validator: function (arr) {

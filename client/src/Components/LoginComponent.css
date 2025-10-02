@@ -1,17 +1,17 @@
-.register-page {
+.login-page {
   min-height: 100vh;
   background-color: #f8f8f8;
   padding: 80px 0 60px;
 }
 
-.register-container {
+.login-container {
   background: white;
   padding: 50px 40px;
   max-width: 600px;
   margin: 0 auto;
 }
 
-.register-title {
+.login-title {
   font-size: 28px;
   font-weight: 400;
   text-align: start;
@@ -20,20 +20,11 @@
   letter-spacing: 0.5px;
 }
 
-.register-form {
+.login-form {
   width: 100%;
 }
 
-.form-label {
-  display: block;
-  font-size: 13px;
-  color: #000;
-  margin-bottom: 8px;
-  font-weight: 500;
-}
-
-.register-input,
-.register-select {
+.login-input {
   width: 100%;
   padding: 12px 14px;
   border: 1px solid #d1d1d1;
@@ -42,15 +33,13 @@
   background: white;
 }
 
-.register-input:focus,
-.register-select:focus {
+.login-input:focus {
   outline: none;
   border-color: #000;
   box-shadow: none;
 }
 
-.register-input:disabled,
-.register-select:disabled {
+.login-input:disabled {
   background-color: #f5f5f5;
   cursor: not-allowed;
 }
@@ -81,66 +70,48 @@
   opacity: 0.5;
 }
 
-.password-requirements {
-  padding: 12px 0;
+.forgot-password-container {
+  text-align: right;
+  padding-top: 8px;
 }
 
-.requirements-text {
-  font-size: 12px;
+.forgot-password-link {
+  color: #000;
+  font-size: 13px;
+  text-decoration: underline;
+}
+
+.forgot-password-link:hover {
   color: #666;
-  line-height: 1.5;
-  margin: 0;
 }
 
-.register-select {
-  appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 12px center;
-  padding-right: 35px;
-}
-
-.newsletter-checkbox {
+.remember-me-checkbox {
   display: flex;
-  align-items: start;
+  align-items: center;
   gap: 12px;
 }
 
-.newsletter-check {
+.remember-me-check {
   width: 20px;
   height: 20px;
   border: 1px solid #d1d1d1;
   cursor: pointer;
   flex-shrink: 0;
-  margin-top: 2px;
 }
 
-.newsletter-check:checked {
+.remember-me-check:checked {
   background-color: #000;
   border-color: #000;
 }
 
-.newsletter-label {
+.remember-me-label {
   font-size: 13px;
   color: #000;
-  line-height: 1.6;
   cursor: pointer;
   margin: 0;
 }
 
-.newsletter-link {
-  color: #000;
-  text-decoration: underline;
-  font-size: 13px;
-  margin-top: 6px;
-  display: inline-block;
-}
-
-.newsletter-link:hover {
-  color: #666;
-}
-
-.register-submit-btn {
+.login-submit-btn {
   width: 100%;
   padding: 16px;
   background: #000;
@@ -155,69 +126,64 @@
   text-transform: uppercase;
 }
 
-.register-submit-btn:hover:not(:disabled) {
+.login-submit-btn:hover:not(:disabled) {
   background: #333;
 }
 
-.register-submit-btn:disabled {
+.login-submit-btn:disabled {
   background: #999;
   cursor: not-allowed;
 }
 
-.login-link-container {
+.register-link-container {
   margin-top: 30px;
   text-align: center;
   padding-top: 20px;
   border-top: 1px solid #e5e5e5;
 }
 
-.login-text {
+.register-text {
   font-size: 14px;
   color: #666;
   margin: 0;
 }
 
-.login-link {
+.register-link {
   color: #000;
   text-decoration: underline;
   font-weight: 500;
 }
 
-.login-link:hover {
+.register-link:hover {
   color: #666;
 }
 
 /* Responsive Styles */
 @media (max-width: 768px) {
-  .register-page {
+  .login-page {
     padding: 60px 0 40px;
   }
 
-  .register-container {
+  .login-container {
     padding: 30px 20px;
   }
 
-  .register-title {
+  .login-title {
     font-size: 24px;
     margin-bottom: 30px;
   }
 }
 
 @media (max-width: 576px) {
-  .register-container {
+  .login-container {
     padding: 25px 15px;
   }
 
-  .register-title {
+  .login-title {
     font-size: 22px;
   }
 
-  .form-label {
-    font-size: 12px;
-  }
-
-  .register-input,
-  .register-select {
+  .login-input {
     font-size: 13px;
     padding: 10px 12px;
   }

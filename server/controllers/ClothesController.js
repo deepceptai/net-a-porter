@@ -1,8 +1,10 @@
+// controllers/ClothesController.js
 import Clothes from "../models/Clothes.js";
+import mongoose from "mongoose";
 import cloudinary from "../config/cloudinary.js";
 import streamifier from "streamifier";
 
-// helper to stream file buffer to Cloudinary
+// ================== HELPER ==================
 const uploadToCloudinary = (fileBuffer) => {
   return new Promise((resolve, reject) => {
     const stream = cloudinary.uploader.upload_stream(
@@ -16,7 +18,7 @@ const uploadToCloudinary = (fileBuffer) => {
   });
 };
 
-// ---------------- UPLOAD (CREATE) ----------------
+// ================== UPLOAD (CREATE) ==================
 export const Upload = async (req, res) => {
   try {
     const {
@@ -32,7 +34,6 @@ export const Upload = async (req, res) => {
       sizeAndFit,
     } = req.body;
 
-    // validation
     if (
       !category ||
       !dress ||
@@ -51,37 +52,22 @@ export const Upload = async (req, res) => {
       });
     }
 
-    // upload multiple images
+    // Upload multiple images to Cloudinary
     const uploadResults = await Promise.all(
       req.files.map((file) => uploadToCloudinary(file.buffer))
     );
     const imageUrls = uploadResults.map((result) => result.secure_url);
 
-    // parse size
-    let parsedSize = size;
-    if (typeof size === "string") {
-      try {
-        parsedSize = JSON.parse(size);
-      } catch {
-        parsedSize = [size];
-      }
-    }
+    // Parse arrays
+    const parsedSize = typeof size === "string" ? JSON.parse(size) : size;
+    const parsedColor = typeof color === "string" ? JSON.parse(color) : color;
 
-    // parse color
-    let parsedColor = color;
-    if (typeof color === "string") {
-      try {
-        parsedColor = JSON.parse(color);
-      } catch {
-        parsedColor = [color];
-      }
-    }
-
-    // parse sizeAndFit
+    // Parse sizeAndFit (if sent as JSON)
     let parsedSizeAndFit = {};
     if (sizeAndFit) {
       try {
-        parsedSizeAndFit = JSON.parse(sizeAndFit);
+        parsedSizeAndFit =
+          typeof sizeAndFit === "string" ? JSON.parse(sizeAndFit) : sizeAndFit;
       } catch (err) {
         return res.status(400).json({
           success: false,
@@ -91,6 +77,7 @@ export const Upload = async (req, res) => {
     }
 
     const newClothes = new Clothes({
+      user: req.user._id, // <-- assign logged-in user
       category,
       dress,
       type,
@@ -102,8 +89,6 @@ export const Upload = async (req, res) => {
       editorNotes: editorNotes || "",
       sizeAndFit: parsedSizeAndFit,
       images: imageUrls,
-      reviews: [], // initialize empty
-      averageRating: 0,
     });
 
     await newClothes.save();
@@ -122,11 +107,11 @@ export const Upload = async (req, res) => {
   }
 };
 
-// ---------------- GET ALL CLOTHES ----------------
+// ================== GET ALL CLOTHES ==================
 export const getClothes = async (req, res) => {
   try {
-  
-    const clothes = await Clothes.find({ category: "clothes" })
+    const clothes = await Clothes.find()
+      .populate("user", "firstName lastName email") // bring basic user info
       .sort({ createdAt: -1 })
       .lean();
 
@@ -144,10 +129,10 @@ export const getClothes = async (req, res) => {
   }
 };
 
-// ---------------- FILTER CLOTHES ----------------
+// ================== FILTER CLOTHES ==================
 export const filterClothes = async (req, res) => {
   try {
-    const { category, dress, type, size, color, designer, minPrice, maxPrice } =
+    const { category, dress, type, size, color, designer, minPrice, maxPrice, userId } =
       req.query;
 
     let filter = {};
@@ -155,9 +140,10 @@ export const filterClothes = async (req, res) => {
     if (category) filter.category = category;
     if (dress) filter.dress = dress;
     if (type) filter.type = type;
-    if (size) filter.size = size;
-    if (color) filter.color = color;
+    if (size) filter.size = { $in: [size] };  // ✅ fix for arrays
+    if (color) filter.color = { $in: [color] }; // ✅ fix for arrays
     if (designer) filter.designer = designer;
+    if (userId) filter.user = userId;
 
     if (minPrice || maxPrice) {
       filter.price = {};
@@ -165,7 +151,9 @@ export const filterClothes = async (req, res) => {
       if (maxPrice) filter.price.$lte = Number(maxPrice);
     }
 
-    const clothes = await Clothes.find(filter).sort({ createdAt: -1 });
+    const clothes = await Clothes.find(filter)
+      .populate("user", "firstName lastName email")
+      .sort({ createdAt: -1 });
 
     return res.status(200).json({
       success: true,
@@ -181,7 +169,8 @@ export const filterClothes = async (req, res) => {
   }
 };
 
-// ---------------- FILTER OPTIONS ----------------
+
+// ================== FILTER OPTIONS ==================
 export const getFilterOption = async (req, res) => {
   try {
     const category = await Clothes.distinct("category");
@@ -211,12 +200,22 @@ export const getFilterOption = async (req, res) => {
   }
 };
 
-// ---------------- GET SINGLE CLOTHE ----------------
+// ================== GET SINGLE CLOTHE ==================
 export const getSingleClothe = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const product = await Clothes.findById(id);
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid product ID",
+      });
+    }
+
+    const product = await Clothes.findById(id).populate(
+      "user",
+      "firstName lastName email"
+    );
 
     if (!product) {
       return res.status(404).json({
@@ -229,8 +228,56 @@ export const getSingleClothe = async (req, res) => {
       success: true,
       data: product,
     });
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+};
+
+// ================== GET CLOTHES OPTIONS (dress & type) ==================
+export const getClothesOption = async (req, res) => {
+  try {
+    const dresses = await Clothes.distinct("dress");
+    const types = await Clothes.distinct("type");
+
+    return res.status(200).json({
+      success: true,
+      data: { dresses, types },
+    });
   } catch (error) {
-    console.error("Error in fetching the product", error);
+    console.error("Error in fetching the dress and its type", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+};
+
+// ================== GET USER’S CLOTHES ==================
+export const getUserClothes = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid user ID",
+      });
+    }
+
+    const clothes = await Clothes.find({ user: userId })
+      .populate("user", "firstName lastName email")
+      .sort({ createdAt: -1 });
+
+    return res.status(200).json({
+      success: true,
+      count: clothes.length,
+      data: clothes,
+    });
+  } catch (error) {
+    console.error("Error fetching user clothes:", error);
     return res.status(500).json({
       success: false,
       message: "Internal server error",

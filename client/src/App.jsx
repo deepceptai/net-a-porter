@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Navbar from "./Components/Navbar"; 
+import Navbar from "./Components/Navbar";
 import Home from "./pages/Home";
 import CartPage from "./pages/CartPage";
 import Wishlist from "./Components/Wishlist";
@@ -9,14 +9,15 @@ import "./App.css";
 import Clothes from "./pages/Clothes";
 import Register from "./pages/Register";
 import ProductDetailPage from "./pages/ProductDetailsPage";
-import AuthService from "./services/authService"; // import your auth service
+import AuthService from "./services/authService";
+import Login from "./pages/Login";
+import ProtectedRoute from "./Components/ProtectedRoute";
 
 function App() {
   const [scrolled, setScrolled] = useState(false);
   const [showNav, setShowNav] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
 
-  // ✅ Global user state
   const [user, setUser] = useState(null);
   const [loadingUser, setLoadingUser] = useState(true);
 
@@ -43,7 +44,6 @@ function App() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScrollY]);
 
-  // ✅ Check auth on app mount
   useEffect(() => {
     const checkUser = async () => {
       if (AuthService.isAuthenticated()) {
@@ -64,22 +64,55 @@ function App() {
   return (
     <Router>
       {/* Pass user and setter into Navbar */}
-      <Navbar 
-        scrolled={scrolled} 
-        showNav={showNav} 
-        user={user} 
-        setUser={setUser} 
+      <Navbar
+        scrolled={scrolled}
+        showNav={showNav}
+        user={user}
+        setUser={setUser}
         loadingUser={loadingUser}
       />
 
       <Routes>
+        {/* Public routes */}
         <Route path="/" element={<Home />} />
-        <Route path="/new-in" element={<NewIn />} />
-        <Route path="/cart" element={<CartPage />} />
-        <Route path="/wishlist" element={<Wishlist />} />
         <Route path="/clothing" element={<Clothes />} />
+
         <Route path="/register" element={<Register setUser={setUser} />} />
-        <Route path="/product/:id" element={<ProductDetailPage />} />
+        <Route path="/login" element={<Login setUser={setUser} />} />
+
+        {/* Protected routes */}
+        <Route
+          path="/new-in"
+          element={
+            <ProtectedRoute>
+              <NewIn />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/product/:id"
+          element={
+            <ProtectedRoute>
+              <ProductDetailPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/cart"
+          element={
+            <ProtectedRoute>
+              <CartPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/wishlist"
+          element={
+            <ProtectedRoute>
+              <Wishlist />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </Router>
   );
