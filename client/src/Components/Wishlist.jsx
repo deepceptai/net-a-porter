@@ -36,7 +36,7 @@ const Wishlist = () => {
   if (loading) return <h4 className="text-center mt-5">Loading wishlist...</h4>;
 
   return (
-    <div className="container mt-4">
+    <div className="container margin-custom">
       <h2 className="mb-4 text-center">💖 My Wishlist</h2>
       {wishlist.length === 0 ? (
         <p className="text-center">Your wishlist is empty</p>

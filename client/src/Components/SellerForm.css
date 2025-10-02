@@ -1,0 +1,190 @@
+.seller-form-page {
+  min-height: 100vh;
+  background-color: #f8f8f8;
+  padding: 80px 0 60px;
+}
+
+.seller-form-container {
+  background: white;
+  padding: 50px 40px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.seller-form-title {
+  font-size: 28px;
+  font-weight: 400;
+  text-align: start;
+  margin-bottom: 40px;
+  color: #000;
+  letter-spacing: 0.5px;
+}
+
+.seller-form {
+  width: 100%;
+}
+
+.seller-input,
+.seller-select,
+.seller-textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #d1d1d1;
+  font-size: 14px;
+  transition: border-color 0.2s;
+  background: white;
+}
+
+.seller-input:focus,
+.seller-select:focus,
+.seller-textarea:focus {
+  outline: none;
+  border-color: #000;
+  box-shadow: none;
+}
+
+.seller-input:disabled,
+.seller-select:disabled,
+.seller-textarea:disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+}
+
+.seller-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 35px;
+}
+
+.seller-textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.size-fit-section {
+  border-top: 1px solid #e5e5e5;
+  padding-top: 30px;
+  margin-top: 30px;
+}
+
+.section-title {
+  font-size: 20px;
+  font-weight: 500;
+  color: #000;
+  margin-bottom: 25px;
+  letter-spacing: 0.3px;
+}
+
+.subsection-title {
+  font-size: 16px;
+  font-weight: 500;
+  color: #000;
+  margin-bottom: 20px;
+  margin-top: 25px;
+  letter-spacing: 0.2px;
+}
+
+.images-upload-container {
+  border: 1px dashed #d1d1d1;
+  padding: 20px;
+  border-radius: 4px;
+  background-color: #fafafa;
+}
+
+.image-upload-item {
+  position: relative;
+}
+
+.file-selected-text {
+  display: block;
+  color: #28a745;
+  font-size: 12px;
+  margin-top: 6px;
+  padding-left: 4px;
+}
+
+.seller-submit-btn {
+  width: 100%;
+  padding: 16px;
+  background: #000;
+  color: white;
+  border: none;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 10px;
+  text-transform: uppercase;
+}
+
+.seller-submit-btn:hover:not(:disabled) {
+  background: #333;
+}
+
+.seller-submit-btn:disabled {
+  background: #999;
+  cursor: not-allowed;
+}
+
+.form-text {
+  font-size: 12px;
+  color: #666;
+  margin-top: 6px;
+  display: block;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .seller-form-page {
+    padding: 60px 0 40px;
+  }
+
+  .seller-form-container {
+    padding: 30px 20px;
+  }
+
+  .seller-form-title {
+    font-size: 24px;
+    margin-bottom: 30px;
+  }
+
+  .section-title {
+    font-size: 18px;
+  }
+
+  .subsection-title {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 576px) {
+  .seller-form-container {
+    padding: 25px 15px;
+  }
+
+  .seller-form-title {
+    font-size: 22px;
+  }
+
+  .form-label {
+    font-size: 12px;
+  }
+
+  .seller-input,
+  .seller-select,
+  .seller-textarea {
+    font-size: 13px;
+    padding: 10px 12px;
+  }
+
+  .section-title {
+    font-size: 17px;
+  }
+
+  .subsection-title {
+    font-size: 14px;
+  }
+}

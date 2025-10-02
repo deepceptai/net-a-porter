@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './ProductDetails.css';
+import axios from 'axios';
 import Hells from '/Images/hells.avif';
 import Scarf from '/Images/scarf.avif';
 
@@ -10,17 +11,83 @@ function ProductDetails({ product, formatPrice }) {
   const [isSizeAndFitOpen, setIsSizeAndFitOpen] = useState(false);
   const [isDetailsAndCareOpen, setIsDetailsAndCareOpen] = useState(false);
   const [isDeliveryOpen, setIsDeliveryOpen] = useState(false);
+  const [loadingCart, setLoadingCart] = useState(null); 
+  const [loadingWishlist, setLoadingWishlist] = useState(null);
+  const [isInWishlist, setIsInWishlist] = useState(false);
+  const [isInCart, setIsInCart] = useState(false);
 
-  const handleAddToBag = () => {
-    if (!selectedSize) {
-      alert('Please select a size');
-      return;
+  const token = localStorage.getItem("token");
+  useEffect(() => {
+
+    const fetchData = async () => {
+      if (!token) return;
+
+      try {
+        // Wishlist
+        const wishlistRes = await axios.get("http://localhost:5000/api/wishlist", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const wishlistIds = wishlistRes.data.map((item) => item.product._id);
+        setIsInWishlist(wishlistIds.includes(product._id));
+
+        // Cart
+        const cartRes = await axios.get("http://localhost:5000/api/cart", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const cartIds = cartRes.data.map((item) => item.product._id);
+        setIsInCart(cartIds.includes(product._id));
+      } catch (err) {
+        console.error("Error fetching wishlist/cart:", err);
+      }
+    };
+
+  
+      fetchData();
+  }, [product._id, token]);
+
+   const handleAddToBag = async (productId, size) => {
+    try {
+      setLoadingCart(productId);
+
+      const res = await axios.post(
+        "http://localhost:5000/api/cart/add",
+        { productId, quantity: 1, size },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      alert(res.data.message);
+    } catch (err) {
+      console.error(err);
+      if (err.response && err.response.data.message) {
+        alert( "error"+ err.response.data.message);
+      } else {
+        alert("Failed to add to cart");
+      }
+    } finally {
+      setLoadingCart(null);
     }
-    console.log('Add to bag:', { product, selectedSize, selectedColor });
   };
+  const handleAddToWishlist = async (productId) => {
+    try {
+      setLoadingWishlist(productId);
 
-  const handleAddToWishList = () => {
-    console.log('Add to wishlist:', product);
+      const res = await axios.post(
+        "http://localhost:5000/api/wishlist/add",
+        { productId },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      alert(res.data.message);
+    } catch (err) {
+      console.error(err);
+      if (err.response && err.response.data.message) {
+        alert(err.response.data.message);
+      } else {
+        alert("Failed to add to wishlist");
+      }
+    } finally {
+      setLoadingWishlist(null);
+    }
   };
 
   return (
@@ -98,19 +165,37 @@ function ProductDetails({ product, formatPrice }) {
 
 
         {/* Action Buttons */}
-        <div className="product-actions">
-          <button 
+       <div className="product-actions">
+          <button
             className="btn-add-to-bag"
-            onClick={handleAddToBag}
+            onClick={() => handleAddToBag(product._id, selectedSize)}
+            disabled={(!selectedSize && product.size?.length > 0) || isInCart}
           >
-            Add to Bag
+            {loadingCart === product._id
+              ? "Adding..."
+              : isInCart
+              ? "In Bag"
+              : "Add to Bag"}
           </button>
-          <button 
+
+          <button
             className="btn-add-to-wishlist"
-            onClick={handleAddToWishList}
+            onClick={() => handleAddToWishlist(product._id)}
+            disabled={isInWishlist}
           >
-            <i className="far fa-heart"></i>
-            Add to Wish List
+            {loadingWishlist === product._id
+              ? "Adding..."
+              : isInWishlist
+              ? (
+                <>
+                  <i className="fas fa-heart text-danger"></i> In Wishlist
+                </>
+              )
+              : (
+                <>
+                  <i className="far fa-heart"></i> Add to Wish List
+                </>
+              )}
           </button>
         </div>
 
