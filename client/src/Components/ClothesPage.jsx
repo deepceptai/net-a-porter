@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import FilterOptions from './FilterOption';
 import ProductList from './ProductList';
 import './ClothesPage.css';
+import axios from "axios";
 
 function ClothesPage() {
   const [clothes, setClothes] = useState([]);
@@ -19,27 +20,27 @@ function ClothesPage() {
 
   // ---------------- Fetch filter options on mount ----------------
   useEffect(() => {
-  const fetchFilterOptions = async () => {
-    try {
-      const res = await fetch("http://localhost:5000/api/clothes/filters");
-      const data = await res.json();
-      if (data.success) {
-        setFilterOptions({
-          category: data.filters.category,
-          dress: data.filters.dresses,   // 🔄 renamed
-          type: data.filters.types,      // 🔄 renamed
-          size: data.filters.size,
-          color: data.filters.colors,    // 🔄 renamed
-          designer: data.filters.designers // 🔄 renamed
-        });
+    const fetchFilterOptions = async () => {
+      try {
+        const res = await fetch("http://localhost:5000/api/clothes/filters");
+        const data = await res.json();
+        if (data.success) {
+          setFilterOptions({
+            category: data.filters.category,
+            dress: data.filters.dresses,   // 🔄 renamed
+            type: data.filters.types,      // 🔄 renamed
+            size: data.filters.size,
+            color: data.filters.colors,    // 🔄 renamed
+            designer: data.filters.designers // 🔄 renamed
+          });
+        }
+      } catch (err) {
+        console.error("Error fetching filter options:", err);
       }
-    } catch (err) {
-      console.error("Error fetching filter options:", err);
-    }
-  };
+    };
 
-  fetchFilterOptions();
-}, []);
+    fetchFilterOptions();
+  }, []);
 
   // ---------------- Fetch clothes whenever filters change ----------------
   useEffect(() => {
@@ -58,7 +59,7 @@ function ClothesPage() {
       });
 
       const queryString = queryParams.toString();
-      const url = queryString 
+      const url = queryString
         ? `http://localhost:5000/api/clothes/filters?${queryString}`
         : 'http://localhost:5000/api/clothes/filters?category=clothes';
 
@@ -89,13 +90,42 @@ function ClothesPage() {
     });
   };
 
+  // ---------------- Handle Wishlist ---------------
+
+  const [loadingWishlist, setLoadingWishlist] = useState(null);
+  const token = localStorage.getItem("token");
+
+  const handleAddToWishlist = async (productId) => {
+    try {
+      setLoadingWishlist(productId);
+
+      const res = await axios.post(
+        "http://localhost:5000/api/wishlist/add",
+        { productId },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      alert(res.data.message);
+    } catch (err) {
+      console.error(err);
+      if (err.response && err.response.data.message) {
+        alert(err.response.data.message);
+      } else {
+        alert("Failed to add to wishlist");
+      }
+    } finally {
+      setLoadingWishlist(null);
+    }
+  };
+
+
   // ---------------- Handle sorting ----------------
   const handleSortChange = (e) => {
     const sortValue = e.target.value;
     setSortBy(sortValue);
 
     const sortedClothes = [...clothes];
-    switch(sortValue) {
+    switch (sortValue) {
       case 'Price Low to High':
         sortedClothes.sort((a, b) => a.price - b.price);
         break;
@@ -126,8 +156,8 @@ function ClothesPage() {
     <div className="clothes-page">
       {/* Hero Image Banner */}
       <div className="hero-banner">
-        <img 
-          src="https://www.net-a-porter.com/content/images/cms/ycm/resource/blob/2683774/725f0e502246d07f63b14961b2af0750/fw25-campaign-plpbanner-1920x270-data.jpg/w3000_q80.jpg" 
+        <img
+          src="https://www.net-a-porter.com/content/images/cms/ycm/resource/blob/2683774/725f0e502246d07f63b14961b2af0750/fw25-campaign-plpbanner-1920x270-data.jpg/w3000_q80.jpg"
           alt="New Season Fashion Campaign"
           className="hero-image"
         />
@@ -154,7 +184,7 @@ function ClothesPage() {
             </span>
           </div>
           <div className="clothes-sort-dropdown">
-            <select 
+            <select
               className="form-select clothes-sort-select"
               value={sortBy}
               onChange={handleSortChange}
@@ -170,7 +200,7 @@ function ClothesPage() {
         <div className="row">
           {/* Filters Sidebar */}
           <div className="col-lg-3 col-md-4">
-            <FilterOptions 
+            <FilterOptions
               onFilterChange={handleFilterChange}
               selectedFilters={selectedFilters}
               totalResults={clothes.length}
@@ -180,10 +210,11 @@ function ClothesPage() {
 
           {/* Product List */}
           <div className="col-lg-9 col-md-8">
-            <ProductList 
+            <ProductList
               products={clothes}
               loading={loading}
               formatPrice={formatPrice}
+              handleAddToWishlist={handleAddToWishlist}
             />
           </div>
         </div>
