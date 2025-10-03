@@ -6,88 +6,165 @@ import Scarf from '/Images/scarf.avif';
 
 function ProductDetails({ product, formatPrice }) {
   const [selectedSize, setSelectedSize] = useState('');
-  const [selectedColor, setSelectedColor] = useState(product.color || '');
+  const [selectedColor, setSelectedColor] = useState(product.color?.[0] || '');
   const [isEditorNotesOpen, setIsEditorNotesOpen] = useState(true);
   const [isSizeAndFitOpen, setIsSizeAndFitOpen] = useState(false);
   const [isDetailsAndCareOpen, setIsDetailsAndCareOpen] = useState(false);
   const [isDeliveryOpen, setIsDeliveryOpen] = useState(false);
-  const [loadingCart, setLoadingCart] = useState(null); 
-  const [loadingWishlist, setLoadingWishlist] = useState(null);
+  const [loadingCart, setLoadingCart] = useState(false);
+  const [loadingWishlist, setLoadingWishlist] = useState(false);
   const [isInWishlist, setIsInWishlist] = useState(false);
   const [isInCart, setIsInCart] = useState(false);
 
   const token = localStorage.getItem("token");
-  useEffect(() => {
 
+  // Check wishlist and cart status
+  useEffect(() => {
     const fetchData = async () => {
       if (!token) return;
 
       try {
-        // Wishlist
+        // Fetch Wishlist
         const wishlistRes = await axios.get("http://localhost:5000/api/wishlist", {
           headers: { Authorization: `Bearer ${token}` },
         });
-        const wishlistIds = wishlistRes.data.map((item) => item.product._id);
-        setIsInWishlist(wishlistIds.includes(product._id));
+        
+        // Handle different response structures
+        const wishlistItems = wishlistRes.data.wishlist || wishlistRes.data || [];
+        
+        // Check if THIS product with THIS size is in wishlist
+        // Only check size if a size is selected
+        const inWishlist = wishlistItems.some((item) => {
+          const isSameProduct = item.product?._id === product._id;
+          
+          // If no size selected yet, don't mark as in wishlist
+          if (!selectedSize) return false;
+          
+          // Check if sizes match (case-insensitive)
+          const isSameSize = item.size?.toUpperCase() === selectedSize.toUpperCase();
+          
+          return isSameProduct && isSameSize;
+        });
+        
+        setIsInWishlist(inWishlist);
 
-        // Cart
+        // Fetch Cart
         const cartRes = await axios.get("http://localhost:5000/api/cart", {
           headers: { Authorization: `Bearer ${token}` },
         });
-        const cartIds = cartRes.data.map((item) => item.product._id);
-        setIsInCart(cartIds.includes(product._id));
+        
+        const cartItems = cartRes.data || [];
+        
+        // Check if THIS product with THIS size is in cart
+        const inCart = cartItems.some((item) => {
+          const isSameProduct = item.product?._id === product._id;
+          
+          // If no size selected, just check product
+          if (!selectedSize) return isSameProduct;
+          
+          // Check if sizes match
+          const isSameSize = item.size?.toUpperCase() === selectedSize.toUpperCase();
+          
+          return isSameProduct && isSameSize;
+        });
+        
+        setIsInCart(inCart);
+        
       } catch (err) {
         console.error("Error fetching wishlist/cart:", err);
+        // Don't show error to user, just log it
       }
     };
 
-  
-      fetchData();
-  }, [product._id, token]);
+    fetchData();
+  }, [product._id, token, selectedSize]); // Re-run when size changes
 
-   const handleAddToBag = async (productId, size) => {
+  const handleAddToBag = async (productId, size) => {
+    // Validate size if product has sizes
+    if (!size && product.size?.length > 0) {
+      alert("Please select a size before adding to bag");
+      return;
+    }
+
+    if (!token) {
+      alert("Please login to add items to your bag");
+      return;
+    }
+
     try {
-      setLoadingCart(productId);
+      setLoadingCart(true);
 
       const res = await axios.post(
         "http://localhost:5000/api/cart/add",
-        { productId, quantity: 1, size },
+        { 
+          productId, 
+          quantity: 1, 
+          size: size?.toUpperCase() || size 
+        },
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      alert(res.data.message);
+      alert(res.data.message || "Added to bag successfully!");
+      setIsInCart(true);
     } catch (err) {
-      console.error(err);
-      if (err.response && err.response.data.message) {
-        alert( "error"+ err.response.data.message);
-      } else {
-        alert("Failed to add to cart");
-      }
+      console.error("Error adding to cart:", err);
+      alert(err.response?.data?.message || "Failed to add to cart");
     } finally {
-      setLoadingCart(null);
+      setLoadingCart(false);
     }
   };
-  const handleAddToWishlist = async (productId) => {
+
+  const handleAddToWishlist = async (productId, size) => {
+    console.log("=== WISHLIST DEBUG ===");
+    console.log("productId:", productId);
+    console.log("size param:", size);
+    console.log("selectedSize state:", selectedSize);
+    console.log("product.size:", product.size);
+    console.log("=====================");
+
+    // Validate size if product has sizes
+    if (!size && product.size?.length > 0) {
+      alert("Please select a size before adding to wishlist");
+      return;
+    }
+
+    if (!token) {
+      alert("Please login to add items to your wishlist");
+      return;
+    }
+
     try {
-      setLoadingWishlist(productId);
+      setLoadingWishlist(true);
+
+      const payload = { 
+        productId, 
+        size 
+      };
+
+      console.log("Sending payload:", payload);
 
       const res = await axios.post(
         "http://localhost:5000/api/wishlist/add",
-        { productId },
+        payload,
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      alert(res.data.message);
+      alert(res.data.message || "Added to wishlist successfully!");
+      setIsInWishlist(true);
     } catch (err) {
-      console.error(err);
-      if (err.response && err.response.data.message) {
-        alert(err.response.data.message);
-      } else {
-        alert("Failed to add to wishlist");
-      }
+      console.error("Error adding to wishlist:", err);
+      console.error("Error response:", err.response?.data);
+      const errorMsg = err.response?.data?.message || "Failed to add to wishlist";
+      alert(errorMsg);
     } finally {
-      setLoadingWishlist(null);
+      setLoadingWishlist(false);
     }
+  };
+
+  // Handle size change - reset cart/wishlist status for new size
+  const handleSizeChange = (size) => {
+    setSelectedSize(size);
+    // Status will be re-checked by useEffect
   };
 
   return (
@@ -107,11 +184,9 @@ function ProductDetails({ product, formatPrice }) {
 
         {/* Price */}
         <div className="product-price-container">
-          <span className="product-price">
-            {formatPrice(product.price)}
-          </span>
+          <span className="product-price">{formatPrice(product.price)}</span>
           <span className="product-price-conversion">
-            {' '}/ Approx.{' '}
+            / Approx.{" "}
             {new Intl.NumberFormat('en-IN', {
               style: 'currency',
               currency: 'INR',
@@ -121,81 +196,80 @@ function ProductDetails({ product, formatPrice }) {
           </span>
         </div>
 
-        {/* Color Selection - Only show if color exists */}
-{product.color && product.color.length > 0 && (
-  <div className="product-option-section">
-    <label className="product-option-label">
-      Color: {selectedColor}
-    </label>
-    <div className="color-options">
-      {product.color.map((clr, index) => (
-        <button
-          key={index}
-          className={`btn btn-outline-dark ${selectedColor === clr ? "selected" : ""}`}
-          onClick={() => setSelectedColor(clr)}
-        >
-          {clr.charAt(0).toUpperCase() + clr.slice(1)}
-        </button>
-      ))}
-    </div>
-  </div>
-)}
+        {/* Color Selection */}
+        {product.color && product.color.length > 0 && (
+          <div className="product-option-section">
+            <label className="product-option-label">Color: {selectedColor}</label>
+            <div className="color-options">
+              {product.color.map((clr, index) => (
+                <button
+                  key={index}
+                  className={`btn btn-outline-dark ${selectedColor === clr ? "selected" : ""}`}
+                  onClick={() => setSelectedColor(clr)}
+                >
+                  {clr.charAt(0).toUpperCase() + clr.slice(1)}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
 
-
-      {/* Size Selection - Only show if size exists */}
-{product.size && product.size.length > 0 && (
-  <div className="product-option-section">
-    <div className="size-header">
-      <label className="product-option-label">Size:</label>
-      <button className="size-guide-link">View size guide</button>
-    </div>
-    <div className="size-options">
-      {product.size.map((sz, index) => (
-        <button
-          key={index}
-          className={`size-button ${selectedSize === sz ? "selected" : ""}`}
-          onClick={() => setSelectedSize(sz)}
-        >
-          {sz}
-        </button>
-      ))}
-    </div>
-  </div>
-)}
-
+        {/* Size Selection */}
+        {product.size && product.size.length > 0 && (
+          <div className="product-option-section">
+            <div className="size-header">
+              <label className="product-option-label">
+                Size: {selectedSize && <span className="selected-size-text">{selectedSize}</span>}
+              </label>
+              <button className="size-guide-link">View size guide</button>
+            </div>
+            <div className="size-options">
+              {product.size.map((sz, index) => (
+                <button
+                  key={index}
+                  className={`size-button ${selectedSize === sz ? "selected" : ""}`}
+                  onClick={() => handleSizeChange(sz)}
+                >
+                  {sz}
+                </button>
+              ))}
+            </div>
+            {!selectedSize && (
+              <p className="size-warning-text">Please select a size</p>
+            )}
+          </div>
+        )}
 
         {/* Action Buttons */}
-       <div className="product-actions">
+        <div className="product-actions">
           <button
             className="btn-add-to-bag"
             onClick={() => handleAddToBag(product._id, selectedSize)}
-            disabled={(!selectedSize && product.size?.length > 0) || isInCart}
+            disabled={(!selectedSize && product.size?.length > 0) || isInCart || loadingCart}
           >
-            {loadingCart === product._id
-              ? "Adding..."
-              : isInCart
-              ? "In Bag"
-              : "Add to Bag"}
+            {loadingCart 
+              ? "Adding..." 
+              : isInCart 
+                ? "In Bag" 
+                : "Add to Bag"}
           </button>
 
           <button
             className="btn-add-to-wishlist"
-            onClick={() => handleAddToWishlist(product._id)}
-            disabled={isInWishlist}
+            onClick={() => handleAddToWishlist(product._id, selectedSize)}
+            disabled={(!selectedSize && product.size?.length > 0) || isInWishlist || loadingWishlist}
           >
-            {loadingWishlist === product._id
-              ? "Adding..."
-              : isInWishlist
-              ? (
-                <>
-                  <i className="fas fa-heart text-danger"></i> In Wishlist
-                </>
-              )
-              : (
-                <>
-                  <i className="far fa-heart"></i> Add to Wish List
-                </>
-              )}
+            {loadingWishlist ? (
+              "Adding..."
+            ) : isInWishlist ? (
+              <>
+                <i className="fas fa-heart text-danger"></i> In Wishlist
+              </>
+            ) : (
+              <>
+                <i className="far fa-heart"></i> Add to Wish List
+              </>
+            )}
           </button>
         </div>
 
@@ -208,7 +282,8 @@ function ProductDetails({ product, formatPrice }) {
           </span>
         </div>
 
-        {/* Editor's Notes Accordion */}
+        {/* Accordions for Editor Notes, Size & Fit, Details & Care, Delivery & Returns */}
+        {/* Editor's Notes */}
         {product.editorNotes && (
           <div className="accordion-section">
             <button
@@ -221,15 +296,13 @@ function ProductDetails({ product, formatPrice }) {
             {isEditorNotesOpen && (
               <div className="accordion-content">
                 <p>{product.editorNotes}</p>
-                
-                {/* Shown Here With Section - only if editor notes is open */}
                 <div className="shown-here-section">
                   <div className="shown-here-title">SHOWN HERE WITH</div>
                   <div className="shown-here-items">
                     <div className="shown-here-item">
                       <div className="shown-here-item-content">
                         <img 
-                          src={Hells}
+                          src={Hells} 
                           alt="Ruched satin mules" 
                           className="shown-here-image"
                         />
@@ -259,7 +332,7 @@ function ProductDetails({ product, formatPrice }) {
           </div>
         )}
 
-        {/* Size & Fit Accordion */}
+        {/* Size & Fit */}
         {product.sizeAndFit && (
           <div className="accordion-section">
             <button
@@ -292,7 +365,7 @@ function ProductDetails({ product, formatPrice }) {
                   </div>
                 )}
                 
-                {product.sizeAndFit.description && product.sizeAndFit.description.length > 0 && (
+                {product.sizeAndFit.description?.length > 0 && (
                   <div className="size-fit-section">
                     {product.sizeAndFit.description.map((desc, index) => (
                       <p key={index}>{desc}</p>
@@ -300,7 +373,7 @@ function ProductDetails({ product, formatPrice }) {
                   </div>
                 )}
                 
-                {product.sizeAndFit.fitTips && product.sizeAndFit.fitTips.length > 0 && (
+                {product.sizeAndFit.fitTips?.length > 0 && (
                   <div className="size-fit-section">
                     {product.sizeAndFit.fitTips.map((tip, index) => (
                       <p key={index}>{tip}</p>
@@ -308,7 +381,7 @@ function ProductDetails({ product, formatPrice }) {
                   </div>
                 )}
                 
-                {product.sizeAndFit.fabricDetails && product.sizeAndFit.fabricDetails.length > 0 && (
+                {product.sizeAndFit.fabricDetails?.length > 0 && (
                   <div className="size-fit-section">
                     {product.sizeAndFit.fabricDetails.map((detail, index) => (
                       <p key={index}>{detail}</p>
@@ -320,7 +393,7 @@ function ProductDetails({ product, formatPrice }) {
           </div>
         )}
 
-        {/* Details & Care Accordion */}
+        {/* Details & Care */}
         <div className="accordion-section">
           <button
             className="accordion-header"
@@ -336,7 +409,7 @@ function ProductDetails({ product, formatPrice }) {
           )}
         </div>
 
-        {/* Delivery & Returns Accordion */}
+        {/* Delivery & Returns */}
         <div className="accordion-section">
           <button
             className="accordion-header"

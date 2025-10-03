@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 import addressSchema from "./subSchemas/addressSchema.js";
 import cartItemSchema from "./subSchemas/cartItemSchema.js";
+import wishlistItemSchema from "./subSchemas/wishlistItemSchema.js"; // ✅ Add this import
 import sellerProfileSchema from "./subSchemas/sellerProfileSchema.js";
 
 const userSchema = new mongoose.Schema(
@@ -27,7 +28,7 @@ const userSchema = new mongoose.Schema(
       unique: true,
       lowercase: true,
       validate: {
-        validator: function(email) {
+        validator: function (email) {
           return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
         },
         message: "Please provide a valid email address",
@@ -37,14 +38,14 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, "Password is required"],
       minlength: [8, "Password must be at least 8 characters"],
-      select: false, // Don't include password in queries by default
+      select: false,
     },
     phone: {
       type: String,
       required: [true, "Phone number is required"],
       validate: {
-        validator: function(phone) {
-          return /^[6-9]\d{9}$/.test(phone); // Indian mobile number format
+        validator: function (phone) {
+          return /^[6-9]\d{9}$/.test(phone);
         },
         message: "Please provide a valid Indian mobile number",
       },
@@ -54,9 +55,9 @@ const userSchema = new mongoose.Schema(
     dateOfBirth: {
       type: Date,
       validate: {
-        validator: function(dob) {
+        validator: function (dob) {
           const age = (Date.now() - dob.getTime()) / (365.25 * 24 * 60 * 60 * 1000);
-          return age >= 13 && dob < new Date(); // Minimum age 13
+          return age >= 13 && dob < new Date();
         },
         message: "You must be at least 13 years old",
       },
@@ -69,9 +70,9 @@ const userSchema = new mongoose.Schema(
       },
     },
     avatar: {
-      type: String, // URL to profile image
+      type: String,
       validate: {
-        validator: function(url) {
+        validator: function (url) {
           if (!url) return true;
           return /^https?:\/\/.+\.(jpg|jpeg|png|gif|webp)$/i.test(url);
         },
@@ -88,7 +89,7 @@ const userSchema = new mongoose.Schema(
       },
       default: ["buyer"],
       validate: {
-        validator: function(roles) {
+        validator: function (roles) {
           return roles.length > 0 && new Set(roles).size === roles.length;
         },
         message: "User must have at least one unique role",
@@ -96,21 +97,10 @@ const userSchema = new mongoose.Schema(
     },
 
     // Buyer-specific Fields
-    wishlist: [{
-      product: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Clothes",
-        required: true,
-      },
-      addedAt: {
-        type: Date,
-        default: Date.now,
-      },
-    }],
-    
+    wishlist: [wishlistItemSchema], // ✅ Use imported schema
     cart: [cartItemSchema],
     addresses: [addressSchema],
-    
+
     orderHistory: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: "Order",
@@ -120,7 +110,7 @@ const userSchema = new mongoose.Schema(
     sellerProfile: {
       type: sellerProfileSchema,
       validate: {
-        validator: function(profile) {
+        validator: function (profile) {
           return !this.roles.includes('seller') || (profile && profile.storeName);
         },
         message: "Seller profile is required for users with seller role",
@@ -252,7 +242,7 @@ const userSchema = new mongoose.Schema(
       },
     }],
 
-    // Social Features (for future expansion)
+    // Social Features
     socialProfiles: {
       facebook: String,
       instagram: String,
@@ -277,9 +267,9 @@ const userSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-    toJSON: { 
+    toJSON: {
       virtuals: true,
-      transform: function(doc, ret) {
+      transform: function (doc, ret) {
         delete ret.password;
         delete ret.emailVerificationToken;
         delete ret.phoneVerificationToken;

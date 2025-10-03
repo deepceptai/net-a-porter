@@ -39,7 +39,10 @@ class AuthService {
 
   // Get user profile
   async getProfile() {
-    return await ApiService.get('/api/users/profile');
+    
+    const response= await ApiService.get('/api/users/profile');
+    console.log(response);
+    return response;
   }
 
   // Logout

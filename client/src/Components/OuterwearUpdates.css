@@ -9,9 +9,9 @@
   cursor: pointer;
 }
 
-.outerwear-card:hover {
+/* .outerwear-card:hover {
   transform: translateY(-5px);
-}
+} */
 
 .outerwear-img {
   object-fit: cover;
