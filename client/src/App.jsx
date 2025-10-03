@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./Components/Navbar";
 import Home from "./pages/Home";
 import CartPage from "./pages/CartPage";
-import Wishlist from "./Components/Wishlist";
+
 import NewIn from "./pages/NewIn";
 import "./App.css";
 import Clothes from "./pages/Clothes";
@@ -12,6 +12,7 @@ import ProductDetailPage from "./pages/ProductDetailsPage";
 import AuthService from "./services/authService";
 import Login from "./pages/Login";
 import ProtectedRoute from "./Components/ProtectedRoute";
+import WishListPage from "./pages/WishListPage";
 
 function App() {
   const [scrolled, setScrolled] = useState(false);
@@ -109,7 +110,7 @@ function App() {
           path="/wishlist"
           element={
             <ProtectedRoute>
-              <Wishlist />
+              <WishListPage />
             </ProtectedRoute>
           }
         />
