@@ -10,7 +10,7 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 // route for uploading clothes (with multiple images)
-router.post("/upload", upload.array("images", 10),protect, Upload);
+router.post("/upload", upload.array("images", 10),protect, getUserFromToken, Upload);
 
 // route for fetching clothes
 router.get("/",protect ,getClothes);
