@@ -1,6 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Figtree:ital,wght@0,300..900;1,300..900&family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&family=Imbue:opsz,wght@10..100,100..900&family=Manrope:wght@200..800&display=swap');
 
 :root{
-    --font-primary: 'IBM Plex Sans', sans-serif; 
+    --font-primary: 'Georgia', serif !important; 
 }
 
+html{
+    font-family: 'Georgia', serif !important ;
+}
