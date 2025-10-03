@@ -65,3 +65,51 @@ export const getCart = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+// Remove product from cart
+export const removeFromCart = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { itemId } = req.params;
+
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    user.cart = user.cart.filter((item) => item._id.toString() !== itemId);
+    await user.save();
+
+    res.json({ message: "Item removed from cart", cart: user.cart });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Move item from cart to wishlist
+export const moveToWishlist = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { itemId } = req.params;
+
+    const user = await User.findById(userId).populate("cart.product");
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    // Find item in cart
+    const cartItem = user.cart.find((item) => item._id.toString() === itemId);
+    if (!cartItem) return res.status(404).json({ message: "Item not found in cart" });
+
+    // Push to wishlist
+    user.wishlist.push({
+      product: cartItem.product._id,
+      size: cartItem.size,
+      addedAt: new Date(),
+    });
+
+    // Remove from cart
+    user.cart = user.cart.filter((item) => item._id.toString() !== itemId);
+
+    await user.save();
+
+    res.json({ message: "Item moved to wishlist", wishlist: user.wishlist, cart: user.cart });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
