@@ -3,60 +3,82 @@ import User from "../models/User.js";
 import Clothes from "../models/Clothes.js";
 
 // Add product to wishlist
+// controllers/wishlistController.js
 export const addToWishlist = async (req, res) => {
   try {
     const userId = req.user.id;
     const { productId, size } = req.body;
 
-    console.log("=== BACKEND WISHLIST DEBUG ===");
-    console.log("User ID:", userId);
-    console.log("Request body:", req.body);
-    console.log("Product ID:", productId);
-    console.log("Size:", size);
-    console.log("Size type:", typeof size);
-    console.log("Size value:", JSON.stringify(size));
-    console.log("============================");
+    // Validate required fields
+    if (!productId) {
+      return res.status(400).json({ message: "Product ID is required" });
+    }
 
-    // 1️⃣ Check if product exists
+    // Check if product exists
     const product = await Clothes.findById(productId);
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
     }
 
-    // 2️⃣ Check if user exists
+    // Check if user exists
     const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // 3️⃣ Check if product already in wishlist (same product + size)
-    const wishlistItem = user.wishlist.find(
-      (item) =>
-        item.product.toString() === productId && item.size === size
+    // FIX: Clean up any existing wishlist items with undefined size
+    if (user.wishlist && user.wishlist.length > 0) {
+      user.wishlist = user.wishlist.map(item => {
+        if (item.size === undefined) {
+          return {
+            ...item.toObject ? item.toObject() : item,
+            size: null
+          };
+        }
+        return item;
+      });
+    }
+
+    // Check if product already in wishlist
+    const existingItem = user.wishlist.find(
+      item => item.product.toString() === productId && item.size === size
     );
 
-    if (wishlistItem) {
+    if (existingItem) {
       return res.status(400).json({ 
         message: "This item is already in your wishlist" 
       });
     }
 
-    // 4️⃣ Add new item to wishlist
-    console.log("Adding to wishlist with size:", size);
+    // Add new item to wishlist - ensure size is properly set
     user.wishlist.push({
       product: productId,
-      size,
+      size: size || null, // Never undefined
     });
 
     await user.save();
 
+    // Populate before sending response
+    await user.populate('wishlist.product');
+
     res.status(200).json({
-      message: "Added to wishlist",
+      message: "Added to wishlist successfully",
       wishlist: user.wishlist,
     });
   } catch (error) {
     console.error("Error adding to wishlist:", error);
-    res.status(500).json({ message: error.message });
+    
+    if (error.name === 'ValidationError') {
+      return res.status(400).json({ 
+        message: "Validation error. Please try again.",
+        error: error.message 
+      });
+    }
+    
+    res.status(500).json({ 
+      message: "Internal server error",
+      error: error.message 
+    });
   }
 };
 

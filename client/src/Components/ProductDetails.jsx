@@ -115,51 +115,53 @@ function ProductDetails({ product, formatPrice }) {
   };
 
   const handleAddToWishlist = async (productId, size) => {
-    console.log("=== WISHLIST DEBUG ===");
-    console.log("productId:", productId);
-    console.log("size param:", size);
-    console.log("selectedSize state:", selectedSize);
-    console.log("product.size:", product.size);
-    console.log("=====================");
 
-    // Validate size if product has sizes
-    if (!size && product.size?.length > 0) {
-      alert("Please select a size before adding to wishlist");
-      return;
+  // Only require size if product has sizes available
+  if (product.size?.length > 0 && !size) {
+    alert("Please select a size before adding to wishlist");
+    return;
+  }
+
+  if (!token) {
+    alert("Please login to add items to your wishlist");
+    return;
+  }
+
+  try {
+    setLoadingWishlist(true);
+
+    // Create payload - only include size if it exists
+    const payload = { 
+      productId
+    };
+
+    // Only add size to payload if it exists and product has sizes
+    if (size && product.size?.length > 0) {
+      payload.size = size.toUpperCase();
+    } else {
+      // For products without sizes, you might want to send null or empty string
+      payload.size = null; // or ''
     }
 
-    if (!token) {
-      alert("Please login to add items to your wishlist");
-      return;
-    }
+    console.log("Sending payload:", payload);
 
-    try {
-      setLoadingWishlist(true);
+    const res = await axios.post(
+      "http://localhost:5000/api/wishlist/add",
+      payload,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
 
-      const payload = { 
-        productId, 
-        size 
-      };
-
-      console.log("Sending payload:", payload);
-
-      const res = await axios.post(
-        "http://localhost:5000/api/wishlist/add",
-        payload,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-
-      alert(res.data.message || "Added to wishlist successfully!");
-      setIsInWishlist(true);
-    } catch (err) {
-      console.error("Error adding to wishlist:", err);
-      console.error("Error response:", err.response?.data);
-      const errorMsg = err.response?.data?.message || "Failed to add to wishlist";
-      alert(errorMsg);
-    } finally {
-      setLoadingWishlist(false);
-    }
-  };
+    alert(res.data.message || "Added to wishlist successfully!");
+    setIsInWishlist(true);
+  } catch (err) {
+    console.error("Error adding to wishlist:", err);
+    console.error("Error response:", err.response?.data);
+    const errorMsg = err.response?.data?.message || "Failed to add to wishlist";
+    alert(errorMsg);
+  } finally {
+    setLoadingWishlist(false);
+  }
+};
 
   // Handle size change - reset cart/wishlist status for new size
   const handleSizeChange = (size) => {

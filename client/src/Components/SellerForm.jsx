@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import authService from "../services/authService";
 import "./SellerForm.css";
 
@@ -33,8 +33,29 @@ function SellerForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [options, setOptions] = useState({ dresses: [], types: [] });
 
   const categories = ["clothes", "bags", "footwear", "accessories"];
+
+  useEffect(() => {
+    fetchOptions();
+  }, []);
+
+  const fetchOptions = async () => {
+    try {
+      const res = await fetch("http://localhost:5000/api/clothes/options");
+      const result = await res.json();
+      
+      if (result.success && result.data) {
+        setOptions({
+          dresses: result.data.dresses || [],
+          types: result.data.types || [],
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching options:", error);
+    }
+  };
 
   const handleChange = (e) => {
     setFormData({
@@ -202,13 +223,19 @@ function SellerForm() {
                         type="text"
                         id="dress"
                         name="dress"
-                        className="form-control seller-input"
+                        className="form-control seller-input seller-datalist-input"
                         placeholder="e.g., shirt, pants, jacket"
                         value={formData.dress}
                         onChange={handleChange}
+                        list="dress-options"
                         required
                         disabled={isLoading}
                       />
+                      <datalist id="dress-options" className="seller-datalist">
+                        {options.dresses.map((dress, index) => (
+                          <option key={index} value={dress} />
+                        ))}
+                      </datalist>
                     </div>
                   </div>
                   <div className="col-12 col-md-6">
@@ -220,13 +247,19 @@ function SellerForm() {
                         type="text"
                         id="type"
                         name="type"
-                        className="form-control seller-input"
+                        className="form-control seller-input seller-datalist-input"
                         placeholder="e.g., cargo, t-shirt"
                         value={formData.type}
                         onChange={handleChange}
+                        list="type-options"
                         required
                         disabled={isLoading}
                       />
+                      <datalist id="type-options" className="seller-datalist">
+                        {options.types.map((type, index) => (
+                          <option key={index} value={type} />
+                        ))}
+                      </datalist>
                     </div>
                   </div>
                 </div>
