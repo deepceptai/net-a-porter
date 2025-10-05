@@ -1,0 +1,171 @@
+/* clothingDropdown.css - Styles for the clothing mega menu dropdown */
+
+.clothing-nav-wrapper {
+  position: relative;
+}
+
+.clothing-mega-dropdown {
+  position: fixed;
+  top: 100%;
+  left: 0;
+  right: 0;
+  width: 100vw;
+  background: white;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  z-index: 1100;
+  animation: slideDownFade 0.3s ease;
+  height: 70vh !important;
+}
+
+@keyframes slideDownFade {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+/* Add vertical divider between 2nd and 3rd columns */
+.clothing-mega-content .row > .col-md-3:nth-child(2) {
+  position: relative;
+}
+
+.clothing-mega-content .row > .col-md-3:nth-child(2)::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0; /* Line on the right edge of the 2nd column */
+  width: 1px;
+  height: 100%;
+  background-color: #ddd; /* Light gray line */
+}
+
+.clothing-dropdown-loading {
+  padding: 60px;
+  text-align: center;
+}
+
+.clothing-dropdown-loading .spinner-border {
+  width: 3rem;
+  height: 3rem;
+  border-color: #000;
+  border-right-color: transparent;
+}
+
+.clothing-mega-content {
+  padding: 40px 0;
+}
+
+.clothing-mega-content .container {
+  max-width: 1400px;
+}
+
+.clothing-section-title {
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  margin-bottom: 20px;
+  color: #000;
+  text-transform: uppercase;
+}
+
+.clothing-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.clothing-list li {
+  margin-bottom: 12px;
+}
+
+.clothing-link {
+  color: #333;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: color 0.2s;
+  display: block;
+}
+
+.clothing-link:hover {
+  color: #000;
+}
+
+.clothing-featured-image {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  min-height: 300px;
+}
+
+.clothing-featured-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.clothing-featured-content {
+  position: absolute;
+  margin-top: 30px;
+  color: black; 
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+}
+
+.clothing-featured-title {
+  font-size: 18px;
+  font-weight: 400;
+  margin-bottom: 10px;
+  color: black;
+}
+
+.clothing-featured-link {
+  color: black;
+  text-decoration: underline;
+  font-size: 14px;
+  display: inline-block;
+  transition: opacity 0.2s;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1400px) {
+  .clothing-mega-content .container {
+    max-width: 1200px;
+  }
+  
+  .clothing-mega-content {
+    padding: 30px 0;
+  }
+}
+
+@media (max-width: 1200px) {
+  .clothing-mega-content .container {
+    max-width: 960px;
+  }
+  
+  .clothing-section-title {
+    font-size: 12px;
+  }
+  
+  .clothing-link {
+    font-size: 13px;
+  }
+  
+  .clothing-featured-image {
+    min-height: 350px;
+  }
+}
+
+@media (max-width: 991px) {
+  /* Hide mega dropdown on mobile - use mobile menu instead */
+  .clothing-mega-dropdown {
+    display: none;
+  }
+}

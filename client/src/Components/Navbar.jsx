@@ -1,11 +1,23 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import AuthService from '../services/authService';
 import './navbar.css';
+import './clothingDropdown.css';
+import NavbarImage from '/Images/navbar-image.jpg';
 
 const Navbar = ({ scrolled, showNav, user, setUser, loadingUser }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
+  const [isClothingDropdownOpen, setIsClothingDropdownOpen] = useState(false);
+  const [clothingOptions, setClothingOptions] = useState(null);
+  const [loadingClothingOptions, setLoadingClothingOptions] = useState(false);
+  
+  // Track selected filters from URL
+  const [searchParams] = useSearchParams();
+  const [selectedFilters, setSelectedFilters] = useState({
+    dress: [],
+    type: []
+  });
   
   const [loading, setLoading] = useState(true);
   const [loginForm, setLoginForm] = useState({ email: '', password: '' });
@@ -14,14 +26,17 @@ const Navbar = ({ scrolled, showNav, user, setUser, loadingUser }) => {
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   
   const navigate = useNavigate();
+  const location = useLocation();
   const dropdownRef = useRef(null);
+  const clothingDropdownRef = useRef(null);
   const hoverTimeoutRef = useRef(null);
+  const clothingHoverTimeoutRef = useRef(null);
 
   const navigationItems = [
     { name: "New In", path: "/new-in" },
     { name: "Shop By", path: "/shop-by" },
     { name: "Designers", path: "/designers" },
-    { name: "Clothing", path: "/clothing" },
+    { name: "Clothing", path: "/clothing", hasDropdown: true },
     { name: "Shoes", path: "/shoes" },
     { name: "Bags", path: "/bags" },
     { name: "Jewelry", path: "/jewelry" },
@@ -30,6 +45,22 @@ const Navbar = ({ scrolled, showNav, user, setUser, loadingUser }) => {
     { name: "Editorial", path: "/editorial" },
     { name: "Sale", path: "/sale" }
   ];
+
+  // Sync selected filters with URL params when on clothing page
+  useEffect(() => {
+    if (location.pathname === '/clothing') {
+      const dressParams = searchParams.getAll('dress');
+      const typeParams = searchParams.getAll('type');
+      
+      setSelectedFilters({
+        dress: dressParams,
+        type: typeParams
+      });
+    } else {
+      // Reset filters when not on clothing page
+      setSelectedFilters({ dress: [], type: [] });
+    }
+  }, [location.pathname, searchParams]);
 
   // Check if user is logged in on mount
   useEffect(() => {
@@ -42,8 +73,40 @@ const Navbar = ({ scrolled, showNav, user, setUser, loadingUser }) => {
       if (hoverTimeoutRef.current) {
         clearTimeout(hoverTimeoutRef.current);
       }
+      if (clothingHoverTimeoutRef.current) {
+        clearTimeout(clothingHoverTimeoutRef.current);
+      }
     };
   }, []);
+
+  // Fetch clothing options when dropdown is opened for the first time
+  useEffect(() => {
+    if (isClothingDropdownOpen && !clothingOptions && !loadingClothingOptions) {
+      fetchClothingOptions();
+    }
+  }, [isClothingDropdownOpen]);
+
+  const fetchClothingOptions = async () => {
+    setLoadingClothingOptions(true);
+    try {
+      const response = await fetch('http://localhost:5000/api/clothes/filter/options');
+      if (!response.ok) throw new Error('Failed to fetch clothing options');
+      const data = await response.json();
+      
+      if (data.success && data.filters) {
+        setClothingOptions(data.filters);
+      }
+    } catch (error) {
+      console.error('Error fetching clothing options:', error);
+      setClothingOptions({
+        dresses: [],
+        types: [],
+        designers: []
+      });
+    } finally {
+      setLoadingClothingOptions(false);
+    }
+  };
 
   const checkAuthStatus = async () => {
     if (!AuthService.isAuthenticated()) {
@@ -63,20 +126,17 @@ const Navbar = ({ scrolled, showNav, user, setUser, loadingUser }) => {
     }
   };
 
- 
-
   const handleLogout = () => {
     AuthService.logout();
     setUser(null);
     navigate("/");
   };
 
-  // when login form succeeds:
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
       const data = await AuthService.login(loginForm);
-      setUser(data.user); // ✅ update parent state
+      setUser(data.user);
       setLoginForm({ email: "", password: "" });
       setIsProfileDropdownOpen(false);
     } catch (error) {
@@ -96,6 +156,61 @@ const Navbar = ({ scrolled, showNav, user, setUser, loadingUser }) => {
       setIsProfileDropdownOpen(false);
       setLoginError('');
     }, 200);
+  };
+
+  const handleClothingMouseEnter = () => {
+    if (clothingHoverTimeoutRef.current) {
+      clearTimeout(clothingHoverTimeoutRef.current);
+    }
+    setIsClothingDropdownOpen(true);
+  };
+
+  const handleClothingMouseLeave = () => {
+    clothingHoverTimeoutRef.current = setTimeout(() => {
+      setIsClothingDropdownOpen(false);
+    }, 200);
+  };
+
+  // Handle filter click - similar to FilterOptions component
+  const handleFilterClick = (filterKey, value, e) => {
+    e.preventDefault();
+    
+    // Get current filters
+    const currentFilters = { ...selectedFilters };
+    const currentFilterArray = currentFilters[filterKey] || [];
+
+    // Toggle the filter value
+    let newFilterArray;
+    if (currentFilterArray.includes(value)) {
+      // Remove if already selected
+      newFilterArray = currentFilterArray.filter(v => v !== value);
+    } else {
+      // Add if not selected
+      newFilterArray = [...currentFilterArray, value];
+    }
+
+    // Update the filters object
+    currentFilters[filterKey] = newFilterArray;
+
+    // Build URL with updated filters
+    const params = new URLSearchParams();
+    
+    Object.keys(currentFilters).forEach(key => {
+      if (currentFilters[key].length > 0) {
+        currentFilters[key].forEach(val => {
+          params.append(key, val);
+        });
+      }
+    });
+
+    // Navigate to clothing page with filters
+    const queryString = params.toString();
+    navigate(`/clothing${queryString ? `?${queryString}` : ''}`);
+  };
+
+  // Check if a filter value is selected
+  const isFilterSelected = (filterKey, value) => {
+    return selectedFilters[filterKey]?.includes(value) || false;
   };
 
   const toggleMobileMenu = () => {
@@ -199,7 +314,6 @@ const Navbar = ({ scrolled, showNav, user, setUser, loadingUser }) => {
                         </div>
                       </div>
                     ) : user ? (
-                      // Logged in view
                       <div className="profile-dropdown-content">
                         <div className="profile-dropdown-header">
                           <h3 className="profile-dropdown-title">
@@ -238,7 +352,6 @@ const Navbar = ({ scrolled, showNav, user, setUser, loadingUser }) => {
                         </div>
                       </div>
                     ) : (
-                      // Login form view
                       <div className="profile-dropdown-content">
                         <div className="profile-dropdown-header">
                           <h3 className="profile-dropdown-title">MY ACCOUNT</h3>
@@ -322,13 +435,223 @@ const Navbar = ({ scrolled, showNav, user, setUser, loadingUser }) => {
           <div className="nav-menu w-100 d-none d-lg-block">
             <ul className="nav justify-content-center mb-0">
               {navigationItems.map((item, i) => (
-                <li className="nav-item" key={i}>
-                  <Link
-                    to={item.path}
-                    className="nav-link text-white nav-menu-link"
-                  >
-                    {item.name}
-                  </Link>
+                <li 
+                  className="nav-item" 
+                  key={i}
+                  onMouseEnter={item.hasDropdown ? handleClothingMouseEnter : undefined}
+                  onMouseLeave={item.hasDropdown ? handleClothingMouseLeave : undefined}
+                >
+                  {item.hasDropdown ? (
+                    <div className="clothing-nav-wrapper">
+                      <Link
+                        to={item.path}
+                        className="nav-link text-white nav-menu-link"
+                      >
+                        {item.name}
+                      </Link>
+                      
+                      {isClothingDropdownOpen && (
+                        <div 
+                          className="clothing-mega-dropdown"
+                          ref={clothingDropdownRef}
+                        >
+                          {loadingClothingOptions ? (
+                            <div className="clothing-dropdown-loading">
+                              <div className="spinner-border" role="status">
+                                <span className="visually-hidden">Loading...</span>
+                              </div>
+                            </div>
+                          ) : clothingOptions ? (
+                            <div className="clothing-mega-content">
+                              <div className="container">
+                                <div className="row">
+                                  <div className="col-md-3">
+                                    <h3 className="clothing-section-title">CLOTHING</h3>
+                                    <ul className="clothing-list">
+                                      <li>
+                                        <Link 
+                                          to="/clothing" 
+                                          className="clothing-link"
+                                          onClick={() => setSelectedFilters({ dress: [], type: [] })}
+                                        >
+                                          All Clothing
+                                        </Link>
+                                      </li>
+                                      <li>
+                                        <Link 
+                                          to="/clothing?filter=new-in" 
+                                          className="clothing-link"
+                                        >
+                                          New In Clothing
+                                        </Link>
+                                      </li>
+                                      {clothingOptions.dresses?.map((dress, idx) => (
+                                        <li key={idx}>
+                                          <a
+                                            href="#"
+                                            onClick={(e) => handleFilterClick('dress', dress, e)}
+                                            className={`clothing-link ${isFilterSelected('dress', dress) ? 'selected' : ''}`}
+                                          >
+                                            {dress}
+                                            {isFilterSelected('dress', dress) && (
+                                              <i className="bi bi-check-lg ms-2"></i>
+                                            )}
+                                          </a>
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  </div>
+                                  
+                                  <div className="col-md-3">
+                                    <h3 className="clothing-section-title">TYPE</h3>
+                                    <ul className="clothing-list">
+                                      {clothingOptions.types?.map((type, idx) => (
+                                        <li key={idx}>
+                                          <a
+                                            href="#"
+                                            onClick={(e) => handleFilterClick('type', type, e)}
+                                            className={`clothing-link ${isFilterSelected('type', type) ? 'selected' : ''}`}
+                                          >
+                                            {type}
+                                            {isFilterSelected('type', type) && (
+                                              <i className="bi bi-check-lg ms-2"></i>
+                                            )}
+                                          </a>
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  </div>
+                                  
+                                  <div className="col-md-3">
+                                    <h3 className="clothing-section-title">TRANSEASONAL</h3>
+                                    <ul className="clothing-list">
+                                      <li>
+                                        <a
+                                          href="#"
+                                          onClick={(e) => handleFilterClick('type', 'Leather Jackets', e)}
+                                          className={`clothing-link ${isFilterSelected('type', 'Leather Jackets') ? 'selected' : ''}`}
+                                        >
+                                          Leather Jackets
+                                          {isFilterSelected('type', 'Leather Jackets') && (
+                                            <i className="bi bi-check-lg ms-2"></i>
+                                          )}
+                                        </a>
+                                      </li>
+                                      <li>
+                                        <a
+                                          href="#"
+                                          onClick={(e) => handleFilterClick('type', 'Midi Skirts', e)}
+                                          className={`clothing-link ${isFilterSelected('type', 'Midi Skirts') ? 'selected' : ''}`}
+                                        >
+                                          Midi Skirts
+                                          {isFilterSelected('type', 'Midi Skirts') && (
+                                            <i className="bi bi-check-lg ms-2"></i>
+                                          )}
+                                        </a>
+                                      </li>
+                                      <li>
+                                        <a
+                                          href="#"
+                                          onClick={(e) => handleFilterClick('type', 'Shirts', e)}
+                                          className={`clothing-link ${isFilterSelected('type', 'Shirts') ? 'selected' : ''}`}
+                                        >
+                                          Shirts
+                                          {isFilterSelected('type', 'Shirts') && (
+                                            <i className="bi bi-check-lg ms-2"></i>
+                                          )}
+                                        </a>
+                                      </li>
+                                      <li>
+                                        <a
+                                          href="#"
+                                          onClick={(e) => handleFilterClick('type', 'Slip Dresses', e)}
+                                          className={`clothing-link ${isFilterSelected('type', 'Slip Dresses') ? 'selected' : ''}`}
+                                        >
+                                          Slip Dresses
+                                          {isFilterSelected('type', 'Slip Dresses') && (
+                                            <i className="bi bi-check-lg ms-2"></i>
+                                          )}
+                                        </a>
+                                      </li>
+                                      <li>
+                                        <a
+                                          href="#"
+                                          onClick={(e) => handleFilterClick('type', 'Straight Leg Jeans', e)}
+                                          className={`clothing-link ${isFilterSelected('type', 'Straight Leg Jeans') ? 'selected' : ''}`}
+                                        >
+                                          Straight Leg Jeans
+                                          {isFilterSelected('type', 'Straight Leg Jeans') && (
+                                            <i className="bi bi-check-lg ms-2"></i>
+                                          )}
+                                        </a>
+                                      </li>
+                                      <li>
+                                        <a
+                                          href="#"
+                                          onClick={(e) => handleFilterClick('type', 'Sweaters', e)}
+                                          className={`clothing-link ${isFilterSelected('type', 'Sweaters') ? 'selected' : ''}`}
+                                        >
+                                          Sweaters
+                                          {isFilterSelected('type', 'Sweaters') && (
+                                            <i className="bi bi-check-lg ms-2"></i>
+                                          )}
+                                        </a>
+                                      </li>
+                                      <li>
+                                        <a
+                                          href="#"
+                                          onClick={(e) => handleFilterClick('type', 'Trench Coats', e)}
+                                          className={`clothing-link ${isFilterSelected('type', 'Trench Coats') ? 'selected' : ''}`}
+                                        >
+                                          Trench Coats
+                                          {isFilterSelected('type', 'Trench Coats') && (
+                                            <i className="bi bi-check-lg ms-2"></i>
+                                          )}
+                                        </a>
+                                      </li>
+                                      <li>
+                                        <a
+                                          href="#"
+                                          onClick={(e) => handleFilterClick('type', 'Wide Leg Pants', e)}
+                                          className={`clothing-link ${isFilterSelected('type', 'Wide Leg Pants') ? 'selected' : ''}`}
+                                        >
+                                          Wide Leg Pants
+                                          {isFilterSelected('type', 'Wide Leg Pants') && (
+                                            <i className="bi bi-check-lg ms-2"></i>
+                                          )}
+                                        </a>
+                                      </li>
+                                    </ul>
+                                  </div>
+                                  
+                                  <div className="col-md-3">
+                                    <div className="clothing-featured-image">
+                                      <img 
+                                        src={NavbarImage} 
+                                        alt="Featured Collection" 
+                                        className="img-fluid"
+                                      />
+                                    </div>
+                                      <div className="clothing-featured-content">
+                                        <h4 className="clothing-featured-title">Carolina Herrera's bold romance</h4>
+                                        <Link to="/collection" className="clothing-featured-link">Shop the collection</Link>
+                                      </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          ) : null}
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <Link
+                      to={item.path}
+                      className="nav-link text-white nav-menu-link"
+                    >
+                      {item.name}
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>

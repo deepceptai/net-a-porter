@@ -66,22 +66,73 @@
   overflow-y: auto;
 }
 
+/* Filter Option Item */
 .filter-option-item {
-  font-size: 13px;
-  color: #666;
+  display: flex;
+  align-items: center;
+  gap: 10px;
   padding: 8px 0;
-  font-weight: 400;
   cursor: pointer;
-  transition: color 0.2s ease;
+  transition: opacity 0.2s ease;
 }
 
 .filter-option-item:hover {
+  opacity: 0.7;
+}
+
+/* Custom Checkbox */
+.custom-checkbox {
+  width: 16px;
+  height: 16px;
+  min-width: 16px;
+  border: 1px solid #999;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  transition: all 0.2s ease;
+}
+
+.filter-option-item:hover .custom-checkbox {
+  border-color: #000;
+}
+
+.custom-checkbox i {
+  font-size: 10px;
+  color: #fff;
+}
+
+.filter-option-item .custom-checkbox:has(i) {
+  background-color: #000;
+  border-color: #000;
+}
+
+.filter-option-text {
+  font-size: 1rem;
+  color: black;
+  font-weight: 400;
+}
+
+.filter-option-item:first-child .filter-option-text {
+  font-weight: 500;
   color: #000;
 }
 
-.filter-option-item:first-child {
-  font-weight: 500;
-  color: #000;
+/* Color Filter Specific Styles */
+.color-circle {
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.color-name {
+  font-size: 13px;
+  color: #666;
 }
 
 /* Custom Scrollbar for Filter Content */
@@ -121,5 +172,9 @@
   
   .filter-content {
     padding: 0 0 15px 0;
+  }
+  
+  .filter-checkbox-item {
+    padding: 6px 0;
   }
 }
