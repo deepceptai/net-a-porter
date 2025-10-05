@@ -6,6 +6,8 @@ import Scarf from '/Images/scarf.avif';
 
 function ProductDetails({ product, formatPrice }) {
   const [selectedSize, setSelectedSize] = useState('');
+  const [wishlistError, setWishlistError] = useState(""); // Wishlist error
+  const [bagError, setBagError] = useState(""); // Bag error
   const [selectedColor, setSelectedColor] = useState(product.color?.[0] || '');
   const [isEditorNotesOpen, setIsEditorNotesOpen] = useState(true);
   const [isSizeAndFitOpen, setIsSizeAndFitOpen] = useState(false);
@@ -18,71 +20,10 @@ function ProductDetails({ product, formatPrice }) {
 
   const token = localStorage.getItem("token");
 
-  // Check wishlist and cart status
-  useEffect(() => {
-    const fetchData = async () => {
-      if (!token) return;
-
-      try {
-        // Fetch Wishlist
-        const wishlistRes = await axios.get("http://localhost:5000/api/wishlist", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        
-        // Handle different response structures
-        const wishlistItems = wishlistRes.data.wishlist || wishlistRes.data || [];
-        
-        // Check if THIS product with THIS size is in wishlist
-        // Only check size if a size is selected
-        const inWishlist = wishlistItems.some((item) => {
-          const isSameProduct = item.product?._id === product._id;
-          
-          // If no size selected yet, don't mark as in wishlist
-          if (!selectedSize) return false;
-          
-          // Check if sizes match (case-insensitive)
-          const isSameSize = item.size?.toUpperCase() === selectedSize.toUpperCase();
-          
-          return isSameProduct && isSameSize;
-        });
-        
-        setIsInWishlist(inWishlist);
-
-        // Fetch Cart
-        const cartRes = await axios.get("http://localhost:5000/api/cart", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        
-        const cartItems = cartRes.data || [];
-        
-        // Check if THIS product with THIS size is in cart
-        const inCart = cartItems.some((item) => {
-          const isSameProduct = item.product?._id === product._id;
-          
-          // If no size selected, just check product
-          if (!selectedSize) return isSameProduct;
-          
-          // Check if sizes match
-          const isSameSize = item.size?.toUpperCase() === selectedSize.toUpperCase();
-          
-          return isSameProduct && isSameSize;
-        });
-        
-        setIsInCart(inCart);
-        
-      } catch (err) {
-        console.error("Error fetching wishlist/cart:", err);
-        // Don't show error to user, just log it
-      }
-    };
-
-    fetchData();
-  }, [product._id, token, selectedSize]); // Re-run when size changes
-
+  // Handle add to bag
   const handleAddToBag = async (productId, size) => {
-    // Validate size if product has sizes
     if (!size && product.size?.length > 0) {
-      alert("Please select a size before adding to bag");
+      setBagError("Please select a size before adding to bag");
       return;
     }
 
@@ -93,14 +34,11 @@ function ProductDetails({ product, formatPrice }) {
 
     try {
       setLoadingCart(true);
+      setBagError(""); // clear error
 
       const res = await axios.post(
         "http://localhost:5000/api/cart/add",
-        { 
-          productId, 
-          quantity: 1, 
-          size: size?.toUpperCase() || size 
-        },
+        { productId, quantity: 1, size: size?.toUpperCase() || size },
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
@@ -114,59 +52,50 @@ function ProductDetails({ product, formatPrice }) {
     }
   };
 
+  // Handle add to wishlist
   const handleAddToWishlist = async (productId, size) => {
-
-  // Only require size if product has sizes available
-  if (product.size?.length > 0 && !size) {
-    alert("Please select a size before adding to wishlist");
-    return;
-  }
-
-  if (!token) {
-    alert("Please login to add items to your wishlist");
-    return;
-  }
-
-  try {
-    setLoadingWishlist(true);
-
-    // Create payload - only include size if it exists
-    const payload = { 
-      productId
-    };
-
-    // Only add size to payload if it exists and product has sizes
-    if (size && product.size?.length > 0) {
-      payload.size = size.toUpperCase();
-    } else {
-      // For products without sizes, you might want to send null or empty string
-      payload.size = null; // or ''
+    if (product.size?.length > 0 && !size) {
+      setWishlistError("Please select a size before adding to wishlist");
+      return;
     }
 
-    console.log("Sending payload:", payload);
+    if (!token) {
+      alert("Please login to add items to your wishlist");
+      return;
+    }
 
-    const res = await axios.post(
-      "http://localhost:5000/api/wishlist/add",
-      payload,
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
+    try {
+      setLoadingWishlist(true);
+      setWishlistError(""); // clear error
 
-    alert(res.data.message || "Added to wishlist successfully!");
-    setIsInWishlist(true);
-  } catch (err) {
-    console.error("Error adding to wishlist:", err);
-    console.error("Error response:", err.response?.data);
-    const errorMsg = err.response?.data?.message || "Failed to add to wishlist";
-    alert(errorMsg);
-  } finally {
-    setLoadingWishlist(false);
-  }
-};
+      const payload = { productId };
+      if (size && product.size?.length > 0) {
+        payload.size = size.toUpperCase();
+      } else {
+        payload.size = null;
+      }
 
-  // Handle size change - reset cart/wishlist status for new size
+      const res = await axios.post(
+        "http://localhost:5000/api/wishlist/add",
+        payload,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      alert(res.data.message || "Added to wishlist successfully!");
+      setIsInWishlist(true);
+    } catch (err) {
+      console.error("Error adding to wishlist:", err);
+      alert(err.response?.data?.message || "Failed to add to wishlist");
+    } finally {
+      setLoadingWishlist(false);
+    }
+  };
+
+  // Reset errors when size changes
   const handleSizeChange = (size) => {
     setSelectedSize(size);
-    // Status will be re-checked by useEffect
+    setWishlistError("");
+    setBagError("");
   };
 
   return (
@@ -216,9 +145,8 @@ function ProductDetails({ product, formatPrice }) {
           </div>
         )}
 
-        {/* Size Selection */}
         {product.size && product.size.length > 0 && (
-          <div className="product-option-section">
+          <div className={`product-option-section ${(wishlistError || bagError) ? "size-error-highlight" : ""}`}>
             <div className="size-header">
               <label className="product-option-label">
                 Size: {selectedSize && <span className="selected-size-text">{selectedSize}</span>}
@@ -236,8 +164,11 @@ function ProductDetails({ product, formatPrice }) {
                 </button>
               ))}
             </div>
-            {!selectedSize && (
-              <p className="size-warning-text">Please select a size</p>
+            {(wishlistError || bagError) && (
+              <div className="size-error-message">
+                <i className="fas fa-exclamation-circle"></i>
+                <span>Please select a size above</span>
+              </div>
             )}
           </div>
         )}
@@ -247,19 +178,16 @@ function ProductDetails({ product, formatPrice }) {
           <button
             className="btn-add-to-bag"
             onClick={() => handleAddToBag(product._id, selectedSize)}
-            disabled={(!selectedSize && product.size?.length > 0) || isInCart || loadingCart}
+            disabled={isInCart || loadingCart}
           >
-            {loadingCart 
-              ? "Adding..." 
-              : isInCart 
-                ? "In Bag" 
-                : "Add to Bag"}
+            {loadingCart ? "Adding..." : isInCart ? "In Bag" : "Add to Bag"}
           </button>
+          
 
           <button
             className="btn-add-to-wishlist"
             onClick={() => handleAddToWishlist(product._id, selectedSize)}
-            disabled={(!selectedSize && product.size?.length > 0) || isInWishlist || loadingWishlist}
+            disabled={isInWishlist || loadingWishlist}
           >
             {loadingWishlist ? (
               "Adding..."
@@ -273,6 +201,7 @@ function ProductDetails({ product, formatPrice }) {
               </>
             )}
           </button>
+         
         </div>
 
         {/* Rewards Program */}
