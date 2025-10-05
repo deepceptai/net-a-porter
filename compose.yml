@@ -1,0 +1,43 @@
+version: "3.9"
+
+services:
+  backend:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: netapoter-backend
+    restart: always
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./server/.env
+    environment:
+      - NODE_ENV=development
+      - MONGO_URI=${MONGO_URI}
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    networks:
+      - mern-network
+    depends_on:
+      - fontend
+
+  frontend:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: netapoter-frontend
+    restart: always
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_URL=http://localhost:5000/
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    networks:
+      - mern-network
+
+networks:
+  mern-network:
+    driver: bridge
