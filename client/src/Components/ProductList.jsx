@@ -4,6 +4,8 @@ import axios from "axios";
 import "./ProductList.css";
 
 function ProductList({ products, loading, formatPrice }) {
+  const API_URL=import.meta.VITE_API_URL;
+
   const [wishlist, setWishlist] = useState([]);
   const [hoveredProduct, setHoveredProduct] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState({});
@@ -15,7 +17,7 @@ function ProductList({ products, loading, formatPrice }) {
         const token = localStorage.getItem("token");
         if (!token) return;
 
-        const res = await axios.get("http://localhost:5000/api/wishlist/", {
+        const res = await axios.get(`${API_URL}api/wishlist/`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 

@@ -6,6 +6,9 @@ import './clothingDropdown.css';
 import NavbarImage from '/Images/navbar-image.jpg';
 
 const Navbar = ({ scrolled, showNav, user, setUser, loadingUser }) => {
+
+  const API_URL=import.meta.env.VITE_API_URL;
+  
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
   const [isClothingDropdownOpen, setIsClothingDropdownOpen] = useState(false);
@@ -89,7 +92,7 @@ const Navbar = ({ scrolled, showNav, user, setUser, loadingUser }) => {
   const fetchClothingOptions = async () => {
     setLoadingClothingOptions(true);
     try {
-      const response = await fetch('http://localhost:5000/api/clothes/filter/options');
+      const response = await fetch(`${API_URL}api/clothes/filter/options`);
       if (!response.ok) throw new Error('Failed to fetch clothing options');
       const data = await response.json();
       

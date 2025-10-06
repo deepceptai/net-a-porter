@@ -5,6 +5,9 @@ import Hells from '/Images/hells.avif';
 import Scarf from '/Images/scarf.avif';
 
 function ProductDetails({ product, formatPrice }) {
+
+  const API_URL=import.meta.env.VITE_API_URL;
+
   const [selectedSize, setSelectedSize] = useState('');
   const [wishlistError, setWishlistError] = useState(""); // Wishlist error
   const [bagError, setBagError] = useState(""); // Bag error
@@ -37,7 +40,7 @@ function ProductDetails({ product, formatPrice }) {
       setBagError(""); // clear error
 
       const res = await axios.post(
-        "http://localhost:5000/api/cart/add",
+        `${API_URL}api/cart/add`,
         { productId, quantity: 1, size: size?.toUpperCase() || size },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -76,7 +79,7 @@ function ProductDetails({ product, formatPrice }) {
       }
 
       const res = await axios.post(
-        "http://localhost:5000/api/wishlist/add",
+        `${API_URL}api/wishlist/add`,
         payload,
         { headers: { Authorization: `Bearer ${token}` } }
       );

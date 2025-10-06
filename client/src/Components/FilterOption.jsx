@@ -3,6 +3,9 @@ import toHex from 'colornames';
 import './FilterOption.css';
 
 function FilterOptions({ onFilterChange, selectedFilters, totalResults }) {
+
+  const API_URL=import.meta.env.VITE_API_URL;
+
   const [filterOptions, setFilterOptions] = useState({});
   const [expandedFilter, setExpandedFilter] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -13,7 +16,7 @@ function FilterOptions({ onFilterChange, selectedFilters, totalResults }) {
 
   const fetchFilterOptions = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/clothes/filter/options');
+      const response = await fetch(`${API_URL}api/clothes/filter/options`);
       const data = await response.json();
 
       if (data.success) {

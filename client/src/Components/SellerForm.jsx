@@ -3,6 +3,8 @@ import authService from "../services/authService";
 import "./SellerForm.css";
 
 function SellerForm() {
+  const API_URL=import.meta.env.VITE_API_URL;
+
   const [formData, setFormData] = useState({
     category: "",
     dress: "",
@@ -43,7 +45,7 @@ function SellerForm() {
 
   const fetchOptions = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/clothes/options");
+      const res = await fetch(`${API_URL}api/clothes/options`);
       const result = await res.json();
       
       if (result.success && result.data) {
@@ -118,7 +120,7 @@ function SellerForm() {
     try {
       const token = authService.getToken();
 
-      const res = await fetch("http://localhost:5000/api/clothes/upload", {
+      const res = await fetch(`${API_URL}api/clothes/upload`, {
         method: "POST",
         body: data,
         headers: {

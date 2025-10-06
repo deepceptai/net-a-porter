@@ -5,6 +5,10 @@ import './ClothesPage.css';
 import axios from "axios";
 
 function ClothesPage() {
+
+  const API_URL=import.meta.env.VITE_API_URL;
+
+
   const [clothes, setClothes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filterOptions, setFilterOptions] = useState({});
@@ -22,7 +26,7 @@ function ClothesPage() {
   useEffect(() => {
     const fetchFilterOptions = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/clothes/filters");
+        const res = await fetch(`${API_URL}api/clothes/filters`);
         const data = await res.json();
         if (data.success) {
           setFilterOptions({
@@ -60,8 +64,8 @@ function ClothesPage() {
 
       const queryString = queryParams.toString();
       const url = queryString
-        ? `http://localhost:5000/api/clothes/filters?${queryString}`
-        : 'http://localhost:5000/api/clothes/filters?category=clothes';
+        ? `${API_URL}api/clothes/filters?${queryString}`
+        : `${API_URL}api/clothes/filters?category=clothes`;
 
       const response = await fetch(url);
       const data = await response.json();
@@ -100,7 +104,7 @@ function ClothesPage() {
       setLoadingWishlist(productId);
 
       const res = await axios.post(
-        "http://localhost:5000/api/wishlist/add",
+        `${API_URL}api/wishlist/add`,
         { productId },
         { headers: { Authorization: `Bearer ${token}` } }
       );

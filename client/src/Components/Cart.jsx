@@ -17,6 +17,9 @@ import Applepay from "/Images/applePay.svg";
 import Kalma from "/Images/klarna.svg";
 
 const Cart = () => {
+
+  const API_URL=import.meta.env.VITE_API_URL;
+
   const [cart, setCart] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -30,7 +33,7 @@ const Cart = () => {
           return;
         }
 
-        const res = await axios.get("http://localhost:5000/api/cart", {
+        const res = await axios.get(`${API_URL}api/cart`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -57,7 +60,7 @@ const Cart = () => {
   const handleRemove = async (itemId) => {
     try {
       const token = authService.getToken();
-      await axios.delete(`http://localhost:5000/api/cart/${itemId}`, {
+      await axios.delete(`${API_URL}api/cart/${itemId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setCart(cart.filter((item) => item._id !== itemId));
@@ -71,7 +74,7 @@ const Cart = () => {
     try {
       const token = authService.getToken();
       await axios.post(
-        `http://localhost:5000/api/cart/move-to-wishlist/${itemId}`,
+        `${API_URL}api/cart/move-to-wishlist/${itemId}`,
         {},
         {
           headers: { Authorization: `Bearer ${token}` },

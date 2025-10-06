@@ -4,7 +4,7 @@ import ApiService from './api';
 class AuthService {
   // User signup
   async signup(userData) {
-    const data = await ApiService.post('/api/users/signup', userData);
+    const data = await ApiService.post('api/users/signup', userData);
     
     if (data.token) {
       ApiService.setToken(data.token);
@@ -28,7 +28,7 @@ class AuthService {
       credentials = emailOrCredentials;
     }
     
-    const data = await ApiService.post('/api/users/login', credentials);
+    const data = await ApiService.post('api/users/login', credentials);
     
     if (data.token) {
       ApiService.setToken(data.token);
@@ -40,7 +40,7 @@ class AuthService {
   // Get user profile
   async getProfile() {
     
-    const response= await ApiService.get('/api/users/profile');
+    const response= await ApiService.get('api/users/profile');
     console.log(response);
     return response;
   }
