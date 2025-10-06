@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import AuthService from '../services/authService';
-import './navbar.css';
+import './Navbar.css';
 import './clothingDropdown.css';
 import NavbarImage from '/Images/navbar-image.jpg';
 
