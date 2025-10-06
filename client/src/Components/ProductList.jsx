@@ -4,7 +4,7 @@ import axios from "axios";
 import "./ProductList.css";
 
 function ProductList({ products, loading, formatPrice }) {
-  const API_URL=import.meta.VITE_API_URL;
+  const API_URL=import.meta.env.VITE_API_URL;
 
   const [wishlist, setWishlist] = useState([]);
   const [hoveredProduct, setHoveredProduct] = useState(null);
