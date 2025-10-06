@@ -34,16 +34,16 @@ const Navbar = ({ scrolled, showNav, user, setUser, loadingUser }) => {
 
   const navigationItems = [
     { name: "New In", path: "/new-in" },
-    { name: "Shop By", path: "/shop-by" },
-    { name: "Designers", path: "/designers" },
+    // { name: "Shop By", path: "/shop-by" },
+    // { name: "Designers", path: "/designers" },
     { name: "Clothing", path: "/clothing", hasDropdown: true },
     { name: "Shoes", path: "/shoes" },
     { name: "Bags", path: "/bags" },
-    { name: "Jewelry", path: "/jewelry" },
+    // { name: "Jewelry", path: "/jewelry" },
     { name: "Accessories", path: "/accessories" },
-    { name: "Home", path: "/home" },
-    { name: "Editorial", path: "/editorial" },
-    { name: "Sale", path: "/sale" }
+    { name: "Home", path: "/" },
+    // { name: "Editorial", path: "/editorial" },
+    // { name: "Sale", path: "/sale" }
   ];
 
   // Sync selected filters with URL params when on clothing page
@@ -241,19 +241,19 @@ const Navbar = ({ scrolled, showNav, user, setUser, loadingUser }) => {
           transition: "transform 0.3s ease, background-color 0.4s ease",
         }}
       >
-        <div className="promo-banner w-100">
+       {/* <div className="promo-banner w-100">
           10% off when you subscribe to our emails. T&Cs apply
-        </div>
+        </div> */}
 
         <div className="container-fluid d-flex flex-column">
           <div className="top-bar d-flex align-items-center justify-content-between w-100 px-4 py-2 gap-2">
             <div className="left-section d-flex align-items-center">
-              <div className="language-selector d-flex align-items-center">
+              {/* <div className="language-selector d-flex align-items-center">
                 <span role="img" aria-label="italy" className="me-2">
                   🇮🇹
                 </span>
                 <span className="language-text">English</span>
-              </div>
+              </div> */}
               
               <button 
                 className="mobile-hamburger d-lg-none"
@@ -272,7 +272,7 @@ const Navbar = ({ scrolled, showNav, user, setUser, loadingUser }) => {
                   className="navbar-brand fw-light text-white text-decoration-none brand-logo"
                   to="/"
                 >
-                  NET-A-PORTER
+                  PURELY-DRESSED
                 </Link>
               </div>
             </div>
@@ -286,10 +286,10 @@ const Navbar = ({ scrolled, showNav, user, setUser, loadingUser }) => {
                 <span className="icon-text">Search</span>
               </Link>
               
-              <div className="rewards-section d-flex align-items-center">
+              {/* <div className="rewards-section d-flex align-items-center">
                 <i className="bi bi-diamond me-1"></i>
                 <span className="rewards-text">Rewards</span>
-              </div>
+              </div> */}
               
               <div 
                 className="profile-dropdown-wrapper" 
@@ -706,10 +706,10 @@ const Navbar = ({ scrolled, showNav, user, setUser, loadingUser }) => {
                 <i className="bi bi-heart me-2"></i>
                 Wishlist
               </Link>
-              <div className="mobile-secondary-link">
+              {/* <div className="mobile-secondary-link">
                 <i className="bi bi-diamond me-2"></i>
                 Rewards
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
