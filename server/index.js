@@ -15,7 +15,12 @@ dotenv.config();
 const app = express();
 
 app.use(express.json());
-app.use(cors({ origin: "https://net-a-porter.netlify.app/" || "http://localhost:5173/" }));
+app.use(
+  cors({
+    origin: ["https://net-a-porter.netlify.app", "http://localhost:5173"],
+    credentials: true,
+  })
+);
 
 app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 
