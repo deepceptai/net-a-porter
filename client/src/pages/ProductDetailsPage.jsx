@@ -8,6 +8,7 @@ import Footer from '../Components/Footer';
 import authService from '../services/authService';
 
 function ProductDetailPage() {
+  const API_URL = import.meta.env.VITE_API_URL;
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -23,7 +24,7 @@ function ProductDetailPage() {
     try {
       const token = authService.getToken(); // ✅ get token from AuthService
 
-      const response = await fetch(`http://localhost:5000/api/clothes/${id}`, {
+      const response = await fetch(`${API_URL}api/clothes/${id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
