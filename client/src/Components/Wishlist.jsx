@@ -5,6 +5,7 @@ import authService from "../services/authService";
 import "./Wishlist.css";
 
 const Wishlist = () => {
+  const API_URL = import.meta.env.VITE_API_URL;
   const [wishlist, setWishlist] = useState([]);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
@@ -44,7 +45,7 @@ const Wishlist = () => {
         setUser(profile.user);
 
         // Fetch wishlist
-        const res = await axios.get("http://localhost:5000/api/wishlist", {
+        const res = await axios.get(`${API_URL}api/wishlist`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setWishlist(res.data);
@@ -70,7 +71,7 @@ const Wishlist = () => {
 
       // Add to cart API call with the actual size from wishlist
       await axios.post(
-        "http://localhost:5000/api/cart/add",
+        `${API_URL}api/cart/add`,
         {
           productId,
           quantity: 1,
@@ -101,7 +102,7 @@ const Wishlist = () => {
 
       // Include size in the delete request query params
       await axios.delete(
-        `http://localhost:5000/api/wishlist/remove/${productId}?size=${size}`,
+        `${API_URL}api/wishlist/remove/${productId}?size=${size}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
