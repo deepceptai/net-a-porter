@@ -1,170 +1,114 @@
 .new-arrivals-section {
-  padding: 60px 20px;
-  background-color: #f8f9fa;
-  font-family: 'Georgia', serif;
+  padding: 60px 0;
 }
 
 .section-header {
-  margin-bottom: 50px;
-}
-
-.item-count {
-  font-size: 13px;
-  letter-spacing: 2px;
-  color: #666;
-  font-weight: 400;
-  margin-bottom: 15px;
-  font-family: 'Arial', sans-serif;
+  padding-right: 20px;
 }
 
 .section-title {
-  font-size: 55px !important;
-  font-weight: 400;
-  color: #1a1a1a;
-  margin-bottom: 20px;
-  font-family: 'Georgia', serif;
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 10px 0;
 }
 
 .section-description {
-  font-size: 16px;
-  color: #333;
-  line-height: 1.6;
-  max-width: 500px;
-  margin-bottom: 30px;
+  color: #555;
+  font-size: 0.95rem;
+  margin-bottom: 20px;
 }
 
 .shop-btn {
-  background-color: #000;
-  color: #fff;
+  background-color: black;
+  color: white;
   border: none;
-  padding: 16px 50px;
-  font-size: 15px;
-  letter-spacing: 1px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-family: 'Arial', sans-serif;
+  padding: 10px 20px;
+  transition: 0.3s;
 }
 
 .shop-btn:hover {
-  background-color: #333;
-  transform: translateY(-2px);
+  background-color: #444;
+}
+
+/* === Carousel Styles === */
+.carousel-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.carousel-images {
+  overflow: hidden;
+  position: relative;
+}
+
+.carousel-track {
+  display: flex;
+  transition: transform 0.6s ease-in-out; /* ✅ Smooth slide */
+  width: 100%;
+}
+
+.product-slide {
+  flex: 0 0 25%; /* 4 per view */
+  padding: 10px;
+  box-sizing: border-box;
 }
 
 .product-card {
-  position: relative;
-  overflow: hidden;
-  cursor: pointer;
-  /* margin-bottom: 30px; */
-  background: #fff;
-  border: none;
-  transition: transform 0.3s ease;
+  text-align: center;
 }
-
-/* .product-card:hover {
-  transform: translateY(-5px);
-} */
 
 .product-image-wrapper {
   position: relative;
   overflow: hidden;
-  background-color: #e9ecef;
-  padding-top: 125%;
+  border: 1px solid #eee;
+  /* border-radius: 8px; */
+  background: #fafafa;
 }
 
 .product-image {
-  position: absolute;
-  top: 0;
-  left: 0;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.5s ease;
+  height: auto;
+  display: block;
+  transition: transform 0.4s ease;
 }
-
-.product-card:hover .product-image {
+/* 
+.product-image:hover {
   transform: scale(1.05);
-}
+} */
 
 .product-brand {
-  text-align: center;
-  padding: 20px;
-  font-size: 14px;
-  letter-spacing: 2px;
-  font-weight: 600;
-  color: #1a1a1a;
-  font-family: 'Arial', sans-serif;
+  margin-top: 10px;
+  font-weight: 500;
 }
 
-/* ✅ Carousel */
-.carousel-wrapper {
-  position: relative;
-}
-
-.carousel-images {
-  position: relative; /* arrows stick to this */
-}
-
-/* Controls */
+/* === Controls === */
 .carousel-control {
   position: absolute;
-  top: 50%; /* ✅ center vertically relative to images */
+  top: 50%;
   transform: translateY(-50%);
-  width: 40px;   /* slimmer, like your screenshot */
-  height: 60px;
-  border: none;
-  background: rgba(255, 255, 255, 0.95);
+  width: 50px;
+  height: 50px;
+   border:none; 
+  background: rgba(255, 255, 255, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: all 0.3s ease;
   z-index: 10;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  /* border-radius: 50%; */
+}
+
+.carousel-control:hover {
+  background: black;
+  color: white;
 }
 
 .carousel-control.prev {
   left: 10px;
-  background-color: rgba(255, 255, 255, 0.3) !important;
 }
 
 .carousel-control.next {
   right: 10px;
-     background-color: rgba(255, 255, 255, 0.3) !important;
-}
-
-.carousel-control:hover {
-  background: #000 !important;
-}
-
-.carousel-control:hover svg {
-  color: #fff;
-}
-
-.products-slider {
-  transition: opacity 0.3s ease;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .section-title {
-    font-size: 100px;
-  }
-
-  .product-card {
-    margin-bottom: 20px;
-  }
-}
-.carousel-images {
-  overflow: hidden; /* hide overflow */
-  position: relative;
-}
-
-.carousel-track {
-  display: flex;
-  transition: transform 0.6s ease-in-out; /* ✅ smooth slide */
-  width: 100%;
-}
-
-.product-slide {
-  flex: 0 0 25%; /* 4 products per view */
-  padding: 0 10px;
 }
